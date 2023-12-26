@@ -23,11 +23,11 @@ services:
       zumzum-net:
         ipv4_address: 172.19.0.12
   zumzum-mysql:
-    image: mysql:5.7.30
+    image: mysql:8.2.0
     restart: unless-stopped
     container_name: zumzum-mysql
     ports:
-      - '3306:3306'
+      - '3307:3306'
     volumes:
       - ./db/mysql/data:/var/lib/mysql
       - ./db/mysql/setup_mysql.sh:/setup_mysql.sh
