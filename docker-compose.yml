@@ -29,8 +29,8 @@ services:
     ports:
       - '3307:3306'
     volumes:
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/setup_mysql.sh:/setup_mysql.sh
+      - ./database/mysql/data:/var/lib/mysql
+      - ./database/mysql/setup_mysql.sh:/setup_mysql.sh
     env_file:
       - .env.development
     networks:

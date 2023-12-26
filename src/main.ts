@@ -17,7 +17,7 @@ async function bootstrap() {
     if (process.send) {
       process.send('ready');
     }
-    logger.log(`✅ API Server is listening on ${3000}`);
+    logger.log(`✅ API Server is listening on ${PORT}`);
   });
 }
 bootstrap();

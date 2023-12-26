@@ -18,7 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@helpers/*": ["src/common/helpers/*"]
+      "@helpers/*": ["src/common/helpers/*"],
+      "@common/*": ["src/common/*"]
     },
   }
 }
