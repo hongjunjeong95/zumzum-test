@@ -1,0 +1,22 @@
+FROM node:16.14 AS builder
+
+WORKDIR /usr/src
+
+# 의존성 설치
+COPY ./package.json ./
+
+# yarn install
+COPY yarn.lock ./
+RUN yarn
+COPY . .
+
+# build
+CMD ["yarn", "run", "build"]
+
+FROM node:16.14-alpine
+WORKDIR /usr/src
+COPY --from=builder /usr/src ./
+CMD [ "yarn" ,"run","start:dev"]
+EXPOSE 3000
+
+# docker network create --gateway 172.19.0.1 --subnet 172.19.0.0/16 zumzum
