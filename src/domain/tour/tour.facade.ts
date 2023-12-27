@@ -24,7 +24,7 @@ export class TourFacade {
     ).map((holidayOfWeek) => holidayOfWeek.week);
 
     await this.tourService.save(
-      this.tourService.createEntities(holidayWeeks, {
+      await this.tourService.createEntities(holidayWeeks, {
         localeEndDateString,
         localeStartDateString,
         timezoneOffset,

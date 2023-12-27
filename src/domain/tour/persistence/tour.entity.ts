@@ -1,10 +1,20 @@
-import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+  Unique,
+  Index,
+} from 'typeorm';
 import { BaseEntity } from '@common/entity/base-entity';
 import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 import { Reservation } from '@domain/reservation/persistence/reservation.entity';
 import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 
 @Entity()
+@Unique(['tourContentId', 'localeDateString'])
+@Index(['tourContentId', 'week', 'date'])
 export class Tour extends BaseEntity {
   @Column({ name: 'date', type: 'timestamp' })
   date: Date;

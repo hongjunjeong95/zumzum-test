@@ -28,7 +28,7 @@ export class TourRepository
     return this.save(entity);
   }
 
-  findManyBytourContentIdAndInWeeksAndGreaterThanNow(
+  async findManyBytourContentIdAndInWeeksAndGreaterThanNow(
     tourContentId: number,
     weeks: WeekEnum[],
   ): Promise<Tour[]> {
@@ -37,6 +37,18 @@ export class TourRepository
         tourContentId,
         week: In(weeks),
         date: MoreThan(new Date()),
+      },
+    });
+  }
+
+  async findLastOne(tourContentId: number): Promise<Tour | null> {
+    return this.findOne({
+      where: {
+        tourContentId,
+        date: MoreThan(new Date()),
+      },
+      order: {
+        date: 'DESC',
       },
     });
   }

@@ -44,4 +44,12 @@ export class DateUtils {
         );
     }
   }
+
+  static addDateToLocaleDateString(date: number, localeDateString: string) {
+    return new Date(
+      new Date(localeDateString).setDate(
+        new Date(localeDateString).getDate() + date,
+      ),
+    ).toLocaleDateString();
+  }
 }

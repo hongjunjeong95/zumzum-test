@@ -27,7 +27,7 @@ export class TourService {
     }
   }
 
-  createEntities(
+  async createEntities(
     holidayWeeks: WeekEnum[],
     param: {
       tourContentId: number;
@@ -36,15 +36,15 @@ export class TourService {
       localeEndDateString: string;
     },
   ) {
-    const {
-      localeEndDateString,
-      localeStartDateString,
-      timezoneOffset,
-      tourContentId,
-    } = param;
+    const { localeEndDateString, timezoneOffset, tourContentId } = param;
+
+    const lastTour = await this.findLastOne(tourContentId);
+    const updatedStartLocaleDateString = lastTour
+      ? DateUtils.addDateToLocaleDateString(1, lastTour.localeDateString)
+      : param.localeStartDateString;
 
     return DateUtils.getLocaleDateStringRange({
-      localeStartDateString,
+      localeStartDateString: updatedStartLocaleDateString,
       localeEndDateString,
     }).map((localeDateString) => {
       const week = DateUtils.getWeek(localeDateString);
@@ -72,5 +72,9 @@ export class TourService {
     });
 
     await this.save(entities);
+  }
+
+  async findLastOne(tourContentId: number): Promise<Tour | null> {
+    return this.tourRepository.findLastOne(tourContentId);
   }
 }
