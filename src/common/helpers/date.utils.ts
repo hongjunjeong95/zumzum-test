@@ -1,28 +1,40 @@
 import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 import { InternalServerErrorException } from '@nestjs/common';
-import dayjs from 'dayjs';
 
 export class DateUtils {
-  static getLocaleDateStringRange(range: {
+  static generateDateArray(range: {
     localeStartDateString: string;
     localeEndDateString: string;
-  }) {
-    const { localeEndDateString, localeStartDateString } = range;
-    return Array.from(
-      {
-        length:
-          dayjs(localeEndDateString).diff(localeStartDateString, 'day') + 1,
-      },
-      (_, index) => {
-        return dayjs(localeStartDateString)
-          .add(index, 'day')
-          .format('YYYY-MM-DD');
-      },
-    );
+  }): string[] {
+    const { localeStartDateString, localeEndDateString } = range;
+
+    const addDays = (date: Date, days: number): Date => {
+      const newDate = new Date(date);
+      newDate.setDate(newDate.getDate() + days);
+      return newDate;
+    };
+
+    const iterateDates = (
+      currentDate: Date,
+      endDate: Date,
+      dates: string[],
+    ): string[] => {
+      return currentDate <= endDate
+        ? iterateDates(addDays(currentDate, 1), endDate, [
+            ...dates,
+            currentDate.toLocaleDateString(),
+          ])
+        : dates;
+    };
+
+    const startDate = new Date(localeStartDateString);
+    const endDate = new Date(localeEndDateString);
+
+    return iterateDates(startDate, endDate, []);
   }
 
   static getWeek(localeDateString: string): WeekEnum {
-    const weekNum = dayjs(localeDateString).day();
+    const weekNum = new Date(localeDateString).getDay();
     switch (weekNum) {
       case 0:
         return WeekEnum.SUNDAY;

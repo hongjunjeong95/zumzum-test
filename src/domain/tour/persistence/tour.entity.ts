@@ -77,21 +77,4 @@ export class Tour extends BaseEntity {
 
     return tour;
   }
-
-  update(data: {
-    date: Date;
-    localeDateString: string;
-    tourContentId: number;
-    timezoneOffset: number;
-  }) {
-    const tour = new Tour();
-    tour.isHoliday = false;
-    tour.maxReservationsPerDay = 5;
-    tour.date = data.date;
-    tour.localeDateString = data.localeDateString;
-    tour.tourContentId = data.tourContentId;
-    tour.timezoneOffset = data.timezoneOffset;
-
-    return tour;
-  }
 }

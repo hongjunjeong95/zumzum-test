@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, In, MoreThan, Repository } from 'typeorm';
 
 import { TourRepositoryInterface } from './tour.repository.interface';
@@ -51,5 +51,21 @@ export class TourRepository
         date: 'DESC',
       },
     });
+  }
+
+  async findOneByTourContentIdAndLocaleDateStringOrFail(
+    tourContentId: number,
+    localeDateString: string,
+  ): Promise<Tour> {
+    const entity = await this.findOneBy({
+      tourContentId,
+      localeDateString,
+    });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't found a tour");
   }
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { TourService } from './service/tour.service';
 import { CreateToursBodyDto } from './dtos/create-many.dto';
 import { HolidayOfWeekService } from '@domain/holiday-of-week/service/holiday-of-week.service';
+import { SetSpecificHolidayBodyDto } from './dtos/set-specific-holiday.dto';
 
 @Injectable()
 export class TourFacade {
@@ -31,5 +32,17 @@ export class TourFacade {
         tourContentId,
       }),
     );
+  }
+
+  public async setSpecificHoliday(
+    body: SetSpecificHolidayBodyDto,
+  ): Promise<any> {
+    const tour =
+      await this.tourService.findOneByTourContentIdAndLocaleDateStringOrFail(
+        body.tourContentId,
+        body.localeDateString,
+      );
+    tour.isHoliday = true;
+    await this.tourService.save(tour);
   }
 }

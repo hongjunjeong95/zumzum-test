@@ -43,7 +43,7 @@ export class TourService {
       ? DateUtils.addDateToLocaleDateString(1, lastTour.localeDateString)
       : param.localeStartDateString;
 
-    return DateUtils.getLocaleDateStringRange({
+    return DateUtils.generateDateArray({
       localeStartDateString: updatedStartLocaleDateString,
       localeEndDateString,
     }).map((localeDateString) => {
@@ -76,5 +76,15 @@ export class TourService {
 
   async findLastOne(tourContentId: number): Promise<Tour | null> {
     return this.tourRepository.findLastOne(tourContentId);
+  }
+
+  async findOneByTourContentIdAndLocaleDateStringOrFail(
+    tourContentId: number,
+    localeDateString: string,
+  ): Promise<Tour> {
+    return this.tourRepository.findOneByTourContentIdAndLocaleDateStringOrFail(
+      tourContentId,
+      localeDateString,
+    );
   }
 }
