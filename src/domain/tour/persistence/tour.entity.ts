@@ -5,13 +5,17 @@ import { Reservation } from '@domain/reservation/persistence/reservation.entity'
 
 @Entity()
 export class Tour extends BaseEntity {
-  @Column({ name: 'date', type: 'timestamp' })
-  date: Date;
+  @Column({ name: 'locale_date_string', type: 'varchar' })
+  localeDateString: string;
+
+  @Column({ name: 'timezone_offset', type: 'int' })
+  timezoneOffset: number;
 
   @Column({
     name: 'is_holiday',
     type: 'boolean',
     comment: '특정 날이 휴일인지 여부',
+    default: false,
   })
   isHoliday: boolean;
 
@@ -32,4 +36,19 @@ export class Tour extends BaseEntity {
 
   @OneToMany(() => Reservation, (reservation) => reservation.tour)
   reservations: Reservation[];
+
+  static create(data: {
+    localeDateString: string;
+    tourContentId: number;
+    timezoneOffset: number;
+  }) {
+    const tour = new Tour();
+    tour.isHoliday = false;
+    tour.maxReservationsPerDay = 5;
+    tour.localeDateString = data.localeDateString;
+    tour.tourContentId = data.tourContentId;
+    tour.timezoneOffset = data.timezoneOffset;
+
+    return tour;
+  }
 }

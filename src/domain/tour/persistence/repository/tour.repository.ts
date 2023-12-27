@@ -21,7 +21,9 @@ export class TourRepository
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: Tour): Promise<Tour> {
-    return this.save(seller);
+  customSave(entity: Tour): Promise<Tour>;
+  customSave(entity: Tour[]): Promise<Tour[]>;
+  customSave(entity: unknown): Promise<Tour | Tour[]> {
+    return this.save(entity);
   }
 }

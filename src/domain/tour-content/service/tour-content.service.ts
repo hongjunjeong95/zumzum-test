@@ -15,7 +15,7 @@ export class TourContentService {
 
   private readonly logger = new Logger(TourContent.name);
 
-  async save(parking: TourContent): Promise<TourContent> {
-    return this.tourContentRepository.customSave(parking);
+  async save(tourContent: TourContent): Promise<TourContent> {
+    return this.tourContentRepository.customSave(tourContent);
   }
 }
