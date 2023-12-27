@@ -10,6 +10,7 @@ export class Reservation extends BaseEntity {
     comment:
       '승인의 결과값이다. 이 값으로 판매자는 고객의 예약 여부를 확인한다. 한 번 승인한 토큰은 재사용이 불가능하다.',
     nullable: true,
+    unique: true,
   })
   token: string;
 

@@ -42,4 +42,8 @@ export class ReservationService {
   async findOneByIdOrFail(reservationId: number): Promise<Reservation> {
     return this.reservationRepository.findOneByIdOrFail(reservationId);
   }
+
+  async findOneByTokenOrFail(token: string): Promise<Reservation> {
+    return this.reservationRepository.findOneByTokenOrFail(token);
+  }
 }

@@ -46,4 +46,16 @@ export class ReservationRepository
 
     throw new NotFoundException("Can't found a reservation by reservationId");
   }
+
+  async findOneByTokenOrFail(token: string): Promise<Reservation | null> {
+    const entity = await this.findOneBy({
+      token,
+    });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't found a reservation by token");
+  }
 }

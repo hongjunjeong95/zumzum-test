@@ -21,3 +21,9 @@ export class UserNotFoundException extends BaseException {
     super(404, message);
   }
 }
+
+export class AlreadyTokenUsedException extends BaseException {
+  constructor(message: string = '토큰을 이미 사용하셨습니다.') {
+    super(400, message);
+  }
+}

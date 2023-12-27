@@ -9,4 +9,5 @@ export interface ReservationRepositoryInterface {
   findByIdOrFail(id: number): Promise<Reservation>;
   getCurrentReservationCount(tourId: number): Promise<number>;
   findOneByIdOrFail(reservationId: number): Promise<Reservation>;
+  findOneByTokenOrFail(token: string): Promise<Reservation | null>;
 }

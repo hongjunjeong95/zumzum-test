@@ -4,6 +4,7 @@ import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
 import { Reservation } from './persistence/reservation.entity';
 import { TourService } from '@domain/tour/service/tour.service';
+import { AlreadyTokenUsedException } from '@common/filters/server-exception';
 
 @Injectable()
 export class ReservationFacade {
@@ -49,6 +50,17 @@ export class ReservationFacade {
       reservationId,
     );
     reservation.token = await this.reservationService.getToken(true);
+    await this.reservationService.save(reservation);
+  }
+
+  public async approveToken(token: string): Promise<void> {
+    const reservation = await this.reservationService.findOneByTokenOrFail(
+      token,
+    );
+    if (reservation.isTokenUsed) {
+      throw new AlreadyTokenUsedException();
+    }
+    reservation.isTokenUsed = true;
     await this.reservationService.save(reservation);
   }
 }
