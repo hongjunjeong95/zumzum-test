@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Seller } from '../seller.entity';
 import { SellerRepository } from './seller.repository';
 import { SellerRepositoryInterfaceToken } from './seller.repository.interface';
+import { TourContent } from 'src/domain/tour-content/persistence/tour-content.entity';
+import { TourContentRepositoryModule } from 'src/domain/tour-content/persistence/repository/tour-content.repository.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Seller])],
+  imports: [TypeOrmModule.forFeature([Seller]), TourContentRepositoryModule],
   providers: [
     {
       provide: SellerRepositoryInterfaceToken,

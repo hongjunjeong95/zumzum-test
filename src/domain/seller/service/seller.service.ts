@@ -10,7 +10,7 @@ import {
 export class SellerService {
   constructor(
     @Inject(SellerRepositoryInterfaceToken)
-    private readonly SellerRepository: SellerRepositoryInterface,
+    private readonly sellerRepository: SellerRepositoryInterface,
   ) {}
 
   private readonly logger = new Logger(Seller.name);

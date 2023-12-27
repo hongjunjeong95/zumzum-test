@@ -16,4 +16,18 @@ export class SellerRepository
   protected readonly logger = new Logger(SellerRepository.name);
   protected readonly ENTITY_NAME = Seller.name;
   protected readonly entity = Seller;
+
+  findOneByEmailOrFail(email: string): Promise<Seller> {
+    return this.findOneByOrFail({
+      email,
+    });
+  }
+
+  findByIdOrFail(id: number): Promise<Seller> {
+    return this.findByIdOrFail(id);
+  }
+
+  customSave(seller: Seller): Promise<Seller> {
+    return this.save(seller);
+  }
 }
