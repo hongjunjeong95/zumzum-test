@@ -4,7 +4,10 @@ import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
 import { Reservation } from './persistence/reservation.entity';
 import { TourService } from '@domain/tour/service/tour.service';
-import { AlreadyTokenUsedException } from '@common/filters/server-exception';
+import {
+  AlreadyTokenUsedException,
+  HolidayReservationException,
+} from '@common/filters/server-exception';
 
 @Injectable()
 export class ReservationFacade {
@@ -35,6 +38,10 @@ export class ReservationFacade {
       tour.maxReservation,
     );
     const token = await this.reservationService.getToken(isApproved);
+
+    if (tour.isHoliday) {
+      throw new HolidayReservationException();
+    }
 
     await this.reservationService.save(
       Reservation.create({

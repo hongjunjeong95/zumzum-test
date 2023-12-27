@@ -35,3 +35,9 @@ export class LateCancelReservationException extends BaseException {
     super(400, message);
   }
 }
+
+export class HolidayReservationException extends BaseException {
+  constructor(message: string = '휴일에 예약을 하실 수 없습니다.') {
+    super(400, message);
+  }
+}
