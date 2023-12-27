@@ -1,4 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { nanoid } from 'nanoid';
 
 import { Reservation } from '../persistence/reservation.entity';
@@ -6,6 +11,8 @@ import {
   ReservationRepositoryInterface,
   ReservationRepositoryInterfaceToken,
 } from '../persistence/repository/reservation.repository.interface';
+import { DateUtils } from '@helpers/date.utils';
+import { LateCancelReservationException } from '@common/filters/server-exception';
 
 @Injectable()
 export class ReservationService {
@@ -43,7 +50,32 @@ export class ReservationService {
     return this.reservationRepository.findOneByIdOrFail(reservationId);
   }
 
+  async findOneByIdWithTourOrFail(reservationId: number): Promise<Reservation> {
+    return this.reservationRepository.findOneByIdWithTourOrFail(reservationId);
+  }
+
   async findOneByTokenOrFail(token: string): Promise<Reservation> {
     return this.reservationRepository.findOneByTokenOrFail(token);
+  }
+
+  public async cancelReservation(
+    reservationId: number,
+    customerId: number,
+  ): Promise<void> {
+    const reservation = await this.findOneByIdWithTourOrFail(reservationId);
+
+    if (reservation.customerId !== customerId) {
+      throw new UnauthorizedException();
+    }
+
+    const daysUntilTour = DateUtils.getDaysUntilDate(reservation.tour.date);
+    const availableCancelDays = 3;
+
+    if (daysUntilTour >= availableCancelDays) {
+      reservation.isCancelled = true;
+      await this.save(reservation);
+    } else {
+      throw new LateCancelReservationException();
+    }
   }
 }

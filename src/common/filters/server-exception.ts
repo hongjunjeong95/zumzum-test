@@ -27,3 +27,11 @@ export class AlreadyTokenUsedException extends BaseException {
     super(400, message);
   }
 }
+
+export class LateCancelReservationException extends BaseException {
+  constructor(
+    message: string = '예약 취소는 투어 시작 3일 전까지만 가능합니다.',
+  ) {
+    super(400, message);
+  }
+}

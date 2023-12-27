@@ -47,6 +47,25 @@ export class ReservationRepository
     throw new NotFoundException("Can't found a reservation by reservationId");
   }
 
+  async findOneByIdWithTourOrFail(
+    reservationId: number,
+  ): Promise<Reservation | null> {
+    const entity = await this.findOne({
+      where: {
+        id: reservationId,
+      },
+      relations: {
+        tour: true,
+      },
+    });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't found a reservation by reservationId");
+  }
+
   async findOneByTokenOrFail(token: string): Promise<Reservation | null> {
     const entity = await this.findOneBy({
       token,

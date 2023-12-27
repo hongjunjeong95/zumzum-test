@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
@@ -43,6 +43,13 @@ export class ReservationFacade {
         customerId,
       }),
     );
+  }
+
+  public async cancelReservation(
+    customerId: number,
+    reservationId: number,
+  ): Promise<void> {
+    return this.reservationService.cancelReservation(reservationId, customerId);
   }
 
   public async approveReservation(reservationId: number): Promise<void> {

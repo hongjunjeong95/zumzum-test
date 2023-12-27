@@ -64,4 +64,14 @@ export class DateUtils {
       ),
     ).toLocaleDateString();
   }
+
+  static getDaysUntilDate(date: Date) {
+    const tourDate = new Date(date);
+
+    // 현재 날짜와 tourDate 간의 차이를 일 단위로 계산
+    const millisecondsInOneDay = 24 * 60 * 60 * 1000; // 1일의 밀리초
+    return Math.floor(
+      (tourDate.getTime() - new Date().getTime()) / millisecondsInOneDay,
+    );
+  }
 }

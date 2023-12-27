@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ReservationFacade } from './reservation.facade';
@@ -25,6 +33,20 @@ export class CustomerReservationController {
   ): Promise<ApiResponse<void>> {
     return ApiResponse.success(
       await this.reservationFacade.reserve(customer.id, body),
+    );
+  }
+
+  @Put('/:reservationId/cancel')
+  @ApiOperation({ summary: 'Cancel the reservation' })
+  async cancel(
+    @AuthUser() customer: Customer,
+    @Param('reservationId', ParseIntPipe) reservationId: number,
+  ): Promise<ApiResponse<void>> {
+    return ApiResponse.success(
+      await this.reservationFacade.cancelReservation(
+        customer.id,
+        reservationId,
+      ),
     );
   }
 }
