@@ -3,7 +3,7 @@ import { BCryptUtils } from '@helpers/bcrypt.utils';
 import {
   UserExistsException,
   PasswordNotMatchException,
-} from '@common/exception/server-exception';
+} from '@common/filters/server-exception';
 import { JWTClaim, TokenProvider } from './token-provider';
 import { SignInParam, SignUpParam } from './auth.service.type';
 import {
