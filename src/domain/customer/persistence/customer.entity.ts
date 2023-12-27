@@ -1,18 +1,9 @@
-import { BaseEntity } from '@common/entity/BaseEntity';
+import { BaseUserEntity } from '@common/entity/base-user-entity';
 import { Reservation } from 'src/domain/reservation/persistence/reservation.entity';
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, OneToMany } from 'typeorm';
 
 @Entity()
-export class Customer extends BaseEntity {
-  @Column({ name: 'name', type: 'varchar' })
-  name: string;
-
-  @Column({ name: 'email', type: 'varchar' })
-  email: string;
-
-  @Column({ name: 'password', type: 'varchar' })
-  password: string;
-
+export class Customer extends BaseUserEntity {
   @OneToMany(() => Reservation, (reservation) => reservation.customer)
   reservations: Reservation[];
 }

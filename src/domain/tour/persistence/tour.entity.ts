@@ -1,14 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Reservation } from 'src/domain/reservation/persistence/reservation.entity';
 import { TourContent } from 'src/domain/tour-content/persistence/tour-content.entity';
-import { BaseEntity } from '@common/entity/BaseEntity';
+import { BaseEntity } from '@common/entity/base-entity';
 
 @Entity()
 export class Tour extends BaseEntity {

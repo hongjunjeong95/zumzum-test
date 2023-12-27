@@ -1,9 +1,11 @@
+import { BaseUserEntity } from '@common/entity/base-user-entity';
 import { Customer } from '../customer.entity';
 
 export const CustomerRepositoryInterfaceToken = Symbol(
   'CustomerRepositoryInterface',
 );
 export interface CustomerRepositoryInterface {
-  customSave(entity: Customer): Promise<Customer>;
+  customSave(entity: BaseUserEntity): Promise<Customer>;
+  findOneByEmailOrFail(email: string): Promise<Customer>;
   findByIdOrFail(id: number): Promise<Customer>;
 }

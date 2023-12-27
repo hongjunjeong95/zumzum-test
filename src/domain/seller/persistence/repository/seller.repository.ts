@@ -23,6 +23,12 @@ export class SellerRepository
     });
   }
 
+  findOneByEmail(email: string): Promise<Seller | null> {
+    return this.findOneBy({
+      email,
+    });
+  }
+
   findByIdOrFail(id: number): Promise<Seller> {
     return this.findByIdOrFail(id);
   }

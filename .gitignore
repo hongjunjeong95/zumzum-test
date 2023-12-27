@@ -37,3 +37,6 @@ lerna-debug.log*
 # data
 /database/mysql/data
 /data
+
+# vscode
+.vscode

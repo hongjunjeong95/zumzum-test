@@ -17,6 +17,12 @@ export class CustomerRepository
   protected readonly ENTITY_NAME = Customer.name;
   protected readonly entity = Customer;
 
+  findOneByEmailOrFail(email: string): Promise<Customer> {
+    return this.findOneByOrFail({
+      email,
+    });
+  }
+
   findByIdOrFail(id: number): Promise<Customer> {
     return this.findByIdOrFail(id);
   }

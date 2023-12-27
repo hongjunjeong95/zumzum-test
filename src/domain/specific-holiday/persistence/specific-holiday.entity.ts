@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '@common/entity/BaseEntity';
 import { TourContent } from 'src/domain/tour-content/persistence/tour-content.entity';
+import { BaseEntity } from '@common/entity/base-entity';
 
 @Entity()
 export class SpecificHoliday extends BaseEntity {
