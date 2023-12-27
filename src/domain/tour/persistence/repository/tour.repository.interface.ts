@@ -6,6 +6,8 @@ export interface TourRepositoryInterface {
   customSave(entity: Tour): Promise<Tour>;
   customSave(entities: Tour[]): Promise<Tour[]>;
   findByIdOrFail(id: number): Promise<Tour>;
-  findManyInWeeksAndGreaterThanNow(weeks: WeekEnum[]): Promise<Tour[]>;
-  // setHolidayByWeeks(): Promise<Tour[]>;
+  findManyBytourContentIdAndInWeeksAndGreaterThanNow(
+    tourContentId: number,
+    weeks: WeekEnum[],
+  ): Promise<Tour[]>;
 }

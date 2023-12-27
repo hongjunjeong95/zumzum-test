@@ -19,6 +19,6 @@ export class HolidayOfWeekFacade {
       tourContentId,
     });
     await this.holidayOfWeekService.save(entities);
-    await this.tourService.setHolidayByWeeks(weeks);
+    await this.tourService.setHolidaysOfWeeks(tourContentId, weeks);
   }
 }

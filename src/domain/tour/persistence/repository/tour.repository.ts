@@ -28,9 +28,13 @@ export class TourRepository
     return this.save(entity);
   }
 
-  findManyInWeeksAndGreaterThanNow(weeks: WeekEnum[]): Promise<Tour[]> {
+  findManyBytourContentIdAndInWeeksAndGreaterThanNow(
+    tourContentId: number,
+    weeks: WeekEnum[],
+  ): Promise<Tour[]> {
     return this.find({
       where: {
+        tourContentId,
         week: In(weeks),
         date: MoreThan(new Date()),
       },

@@ -36,4 +36,8 @@ export class HolidayOfWeekService {
       }),
     );
   }
+
+  findMany(tourContentId: number): Promise<HolidayOfWeek[]> {
+    return this.holidayOfWeekRepository.findManyByTourContentId(tourContentId);
+  }
 }

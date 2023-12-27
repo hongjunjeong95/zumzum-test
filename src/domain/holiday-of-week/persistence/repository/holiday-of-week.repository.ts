@@ -21,6 +21,14 @@ export class HolidayOfWeekRepository
     return this.findByIdOrFail(id);
   }
 
+  findManyByTourContentId(tourContentId: number): Promise<HolidayOfWeek[]> {
+    return this.find({
+      where: {
+        tourContentId,
+      },
+    });
+  }
+
   customSave(entity: HolidayOfWeek): Promise<HolidayOfWeek>;
   customSave(entity: HolidayOfWeek[]): Promise<HolidayOfWeek[]>;
   customSave(entity: unknown): Promise<HolidayOfWeek | HolidayOfWeek[]> {

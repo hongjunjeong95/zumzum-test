@@ -27,36 +27,44 @@ export class TourService {
     }
   }
 
-  createEntities(param: {
-    tourContentId: number;
-    timezoneOffset: number;
-    localeStartDateString: string;
-    localeEndDateString: string;
-  }) {
+  createEntities(
+    holidayWeeks: WeekEnum[],
+    param: {
+      tourContentId: number;
+      timezoneOffset: number;
+      localeStartDateString: string;
+      localeEndDateString: string;
+    },
+  ) {
     const {
       localeEndDateString,
       localeStartDateString,
       timezoneOffset,
       tourContentId,
     } = param;
+
     return DateUtils.getLocaleDateStringRange({
       localeStartDateString,
       localeEndDateString,
-    }).map((localeDateString) =>
-      Tour.create({
+    }).map((localeDateString) => {
+      const week = DateUtils.getWeek(localeDateString);
+      return Tour.create({
+        isHoliday: holidayWeeks.includes(week),
         date: new Date(localeDateString),
-        week: DateUtils.getWeek(localeDateString),
+        week,
         localeDateString,
         tourContentId,
         timezoneOffset,
-      }),
-    );
+      });
+    });
   }
 
-  async setHolidayByWeeks(weeks: WeekEnum[]) {
-    const tours = await this.tourRepository.findManyInWeeksAndGreaterThanNow(
-      weeks,
-    );
+  async setHolidaysOfWeeks(tourContentId: number, weeks: WeekEnum[]) {
+    const tours =
+      await this.tourRepository.findManyBytourContentIdAndInWeeksAndGreaterThanNow(
+        tourContentId,
+        weeks,
+      );
 
     const entities = tours.map((tour) => {
       tour.isHoliday = true;

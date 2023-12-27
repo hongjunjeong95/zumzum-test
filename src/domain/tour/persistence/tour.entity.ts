@@ -51,12 +51,13 @@ export class Tour extends BaseEntity {
   static create(data: {
     date: Date;
     week: WeekEnum;
+    isHoliday: boolean;
     localeDateString: string;
     tourContentId: number;
     timezoneOffset: number;
   }) {
     const tour = new Tour();
-    tour.isHoliday = false;
+    tour.isHoliday = data.isHoliday;
     tour.maxReservationsPerDay = 5;
     tour.date = data.date;
     tour.week = data.week;
