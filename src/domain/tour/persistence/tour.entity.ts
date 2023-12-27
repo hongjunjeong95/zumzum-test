@@ -41,12 +41,12 @@ export class Tour extends BaseEntity {
   isHoliday: boolean;
 
   @Column({
-    name: 'max_reservations_per_day',
+    name: 'max_reservation',
     type: 'int',
     default: 5,
     comment: '하루 최대 자동 예약 허용 수',
   })
-  maxReservationsPerDay: number;
+  maxReservation: number;
 
   @Column({ name: 'tour_content_id', type: 'int' })
   tourContentId: number;
@@ -68,7 +68,7 @@ export class Tour extends BaseEntity {
   }) {
     const tour = new Tour();
     tour.isHoliday = data.isHoliday;
-    tour.maxReservationsPerDay = 5;
+    tour.maxReservation = 5;
     tour.date = data.date;
     tour.week = data.week;
     tour.localeDateString = data.localeDateString;

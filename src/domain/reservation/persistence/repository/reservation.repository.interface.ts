@@ -5,5 +5,7 @@ export const ReservationRepositoryInterfaceToken = Symbol(
 );
 export interface ReservationRepositoryInterface {
   customSave(entity: Reservation): Promise<Reservation>;
+  customSave(entities: Reservation[]): Promise<Reservation[]>;
   findByIdOrFail(id: number): Promise<Reservation>;
+  getCurrentReservationCount(tourId: number): Promise<number>;
 }

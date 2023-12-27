@@ -11,6 +11,7 @@ export interface TourRepositoryInterface {
     weeks: WeekEnum[],
   ): Promise<Tour[]>;
   findLastOne(tourContentId: number): Promise<Tour | null>;
+  findOneByIdOrFail(tourId: number): Promise<Tour>;
   findOneByTourContentIdAndLocaleDateStringOrFail(
     tourContentId: number,
     localeDateString: string,

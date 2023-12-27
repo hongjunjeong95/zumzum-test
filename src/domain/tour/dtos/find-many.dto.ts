@@ -45,7 +45,7 @@ export class TourResponse {
   timezoneOffset: number;
   week: WeekEnum;
   isHoliday: boolean;
-  maxReservationsPerDay: number;
+  maxReservation: number;
   tourContentId: number;
 
   constructor(tour: {
@@ -55,7 +55,7 @@ export class TourResponse {
     timezoneOffset: number;
     week: WeekEnum;
     isHoliday: boolean;
-    maxReservationsPerDay: number;
+    maxReservation: number;
     tourContentId: number;
   }) {
     this.id = tour.id;
@@ -64,7 +64,7 @@ export class TourResponse {
     this.timezoneOffset = tour.timezoneOffset;
     this.week = tour.week;
     this.isHoliday = tour.isHoliday;
-    this.maxReservationsPerDay = tour.maxReservationsPerDay;
+    this.maxReservation = tour.maxReservation;
     this.tourContentId = tour.tourContentId;
   }
 
@@ -80,7 +80,7 @@ export class TourResponse {
       timezoneOffset: tour.timezoneOffset,
       week: tour.week,
       isHoliday: tour.isHoliday,
-      maxReservationsPerDay: tour.maxReservationsPerDay,
+      maxReservation: tour.maxReservation,
       tourContentId: tour.tourContentId,
     });
   }

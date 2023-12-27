@@ -78,6 +78,10 @@ export class TourService {
     return this.tourRepository.findLastOne(tourContentId);
   }
 
+  async findOneByIdOrFail(tourId: number): Promise<Tour> {
+    return this.tourRepository.findOneByIdOrFail(tourId);
+  }
+
   async findOneByTourContentIdAndLocaleDateStringOrFail(
     tourContentId: number,
     localeDateString: string,

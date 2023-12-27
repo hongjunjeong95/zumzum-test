@@ -53,6 +53,18 @@ export class TourRepository
     });
   }
 
+  async findOneByIdOrFail(tourId: number): Promise<Tour | null> {
+    const entity = await this.findOneBy({
+      id: tourId,
+    });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't found a tour");
+  }
+
   async findOneByTourContentIdAndLocaleDateStringOrFail(
     tourContentId: number,
     localeDateString: string,

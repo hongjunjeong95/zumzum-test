@@ -17,11 +17,21 @@ export class ReservationRepository
   protected readonly ENTITY_NAME = Reservation.name;
   protected readonly entity = Reservation;
 
-  findByIdOrFail(id: number): Promise<Reservation> {
+  async findByIdOrFail(id: number): Promise<Reservation> {
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: Reservation): Promise<Reservation> {
-    return this.save(seller);
+  async customSave(entity: Reservation): Promise<Reservation>;
+  async customSave(entity: Reservation[]): Promise<Reservation[]>;
+  async customSave(entity: unknown): Promise<Reservation | Reservation[]> {
+    return this.save(entity);
+  }
+
+  async getCurrentReservationCount(tourId: number): Promise<number> {
+    return this.count({
+      where: {
+        tourId,
+      },
+    });
   }
 }
