@@ -29,4 +29,12 @@ export class TourContent extends BaseEntity {
     (specificHoliday) => specificHoliday.tourContent,
   )
   specificHoliday: SpecificHoliday[];
+
+  static create(data: { content: string; sellerId: number }) {
+    const tourContent = new TourContent();
+    tourContent.content = data.content;
+    tourContent.sellerId = data.sellerId;
+
+    return tourContent;
+  }
 }
