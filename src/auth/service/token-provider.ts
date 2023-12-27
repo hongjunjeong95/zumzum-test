@@ -2,6 +2,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Inject, Injectable } from '@nestjs/common';
 import JwtConfig from '@common/config/variables/jwt.config';
 import { ConfigType } from '@nestjs/config';
+import { UserRole } from '@common/entity/base-user-entity';
 
 @Injectable()
 export class TokenProvider {
@@ -18,6 +19,7 @@ export class TokenProvider {
       sub: claim.userId.toString(),
       email: claim.email,
       name: claim.name,
+      role: claim.role,
     };
     return this.jwtService.sign(payload, {
       secret: this.jwtConfig.accessTokenSecretKey,
@@ -30,6 +32,7 @@ export type JWTClaim = {
   userId: number;
   name: string;
   email: string;
+  role: UserRole;
 };
 
 export type JWTPayload = {
@@ -38,4 +41,5 @@ export type JWTPayload = {
   sub: string;
   email: string;
   name: string;
+  role: UserRole;
 };

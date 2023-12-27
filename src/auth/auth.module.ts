@@ -3,14 +3,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigType } from '@nestjs/config';
 
-import { JwtAccessTokenStrategy } from './jwt-access.strategy';
 import JwtConfig from '@common/config/variables/jwt.config';
+import { SellerRepositoryModule } from '@domain/seller/persistence/repository/seller.repository.module';
+import { CustomerRepositoryModule } from '@domain/customer/persistence/repository/customer.repository.module';
+
 import { SellerAuthController } from './controller/seller.auth.controller';
 import { CustomerAuthController } from './controller/customer.auth.controller';
 import { TokenProvider } from './service/token-provider';
 import { AuthService } from './service/auth.service';
-import { SellerRepositoryModule } from '@domain/seller/persistence/repository/seller.repository.module';
-import { CustomerRepositoryModule } from '@domain/customer/persistence/repository/customer.repository.module';
+import { SellerJwtStrategy } from './guards/seller.jwt.strategy';
+import { CustomerJwtStrategy } from './guards/customer.jwt.strategy';
 
 @Module({
   imports: [
@@ -32,6 +34,11 @@ import { CustomerRepositoryModule } from '@domain/customer/persistence/repositor
     CustomerRepositoryModule,
   ],
   controllers: [SellerAuthController, CustomerAuthController],
-  providers: [JwtAccessTokenStrategy, AuthService, TokenProvider],
+  providers: [
+    SellerJwtStrategy,
+    CustomerJwtStrategy,
+    AuthService,
+    TokenProvider,
+  ],
 })
 export class AuthModule {}

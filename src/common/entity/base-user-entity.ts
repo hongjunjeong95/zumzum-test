@@ -31,3 +31,8 @@ export class BaseUserEntity {
   @Column({ name: 'password', type: 'varchar' })
   password: string;
 }
+
+export enum UserRole {
+  SELLER = 'seller',
+  CUSTOMER = 'customer',
+}

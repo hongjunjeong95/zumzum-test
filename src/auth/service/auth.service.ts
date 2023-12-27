@@ -6,7 +6,7 @@ import {
 } from '@common/filters/server-exception';
 import { JWTClaim, TokenProvider } from './token-provider';
 import { SignInParam, SignUpParam } from './auth.service.type';
-import { BaseUserEntity } from '@common/entity/base-user-entity';
+import { BaseUserEntity, UserRole } from '@common/entity/base-user-entity';
 import {
   CustomerRepositoryInterface,
   CustomerRepositoryInterfaceToken,
@@ -28,31 +28,31 @@ export class AuthService {
     private readonly tokenProvider: TokenProvider,
   ) {}
 
-  private getUserEntity(type: 'Seller' | 'Customer'): BaseUserEntity {
-    if (type === 'Seller') {
+  private getUserEntity(type: UserRole): BaseUserEntity {
+    if (type === UserRole.SELLER) {
       return new Seller();
-    } else if (type === 'Customer') {
+    } else if (type === UserRole.CUSTOMER) {
       return new Customer();
     } else {
       throw new NotFoundException('Invalid user type');
     }
   }
 
-  private getUserRepository(type: 'Seller' | 'Customer') {
+  private getUserRepository(role: UserRole) {
     const repository =
-      type === 'Seller'
+      role === UserRole.SELLER
         ? this.sellerRepository
-        : type === 'Customer'
+        : role === UserRole.CUSTOMER
         ? this.customerRepository
         : null;
 
     return repository;
   }
 
-  async signUp(type: 'Seller' | 'Customer', param: SignUpParam): Promise<void> {
+  async signUp(role: UserRole, param: SignUpParam): Promise<void> {
     const { name, email, password, confirmPassword } = param;
-    const repository = this.getUserRepository(type);
-    const existingUser = await repository.findOneByEmailOrFail(email);
+    const repository = this.getUserRepository(role);
+    const existingUser = await repository.findOneByEmail(email);
 
     if (existingUser) {
       throw new UserExistsException();
@@ -62,7 +62,7 @@ export class AuthService {
       throw new PasswordNotMatchException();
     }
 
-    const entity = this.getUserEntity(type);
+    const entity = this.getUserEntity(role);
     entity.name = name;
     entity.email = email;
     entity.password = await BCryptUtils.encrypt(password);
@@ -70,11 +70,8 @@ export class AuthService {
     await repository.customSave(entity);
   }
 
-  async signIn(
-    type: 'Seller' | 'Customer',
-    param: SignInParam,
-  ): Promise<string> {
-    const repository = this.getUserRepository(type);
+  async signIn(role: UserRole, param: SignInParam): Promise<string> {
+    const repository = this.getUserRepository(role);
 
     const user = await repository.findOneByEmailOrFail(param.email);
 
@@ -92,6 +89,7 @@ export class AuthService {
       userId: user.id,
       email: user.email,
       name: user.name,
+      role,
     };
 
     const authToken = this.tokenProvider.createAuthToken(jwtClaim);

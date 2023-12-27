@@ -8,6 +8,7 @@ import { ApiResponse } from '@common/dto/api-response.dto';
 import { SignUpBodyDto } from './dto/auth-sign-up.dto';
 import { SignInBodyDto } from './dto/auth-sign-in.dto';
 import { AuthService } from '../service/auth.service';
+import { UserRole } from '@common/entity/base-user-entity';
 
 @Controller('/customer-api/v1/auth')
 @ApiTags('auth')
@@ -22,7 +23,7 @@ export class CustomerAuthController {
   @Post('/signup')
   @ApiOperation({ summary: 'Sign up for customer' })
   async signUp(@Body() body: SignUpBodyDto): Promise<ApiResponse<void>> {
-    await this.authService.signUp('Customer', {
+    await this.authService.signUp(UserRole.CUSTOMER, {
       name: body.name,
       email: body.email,
       password: body.password,
@@ -38,7 +39,7 @@ export class CustomerAuthController {
     @Body() body: SignInBodyDto,
     @Res() response: Response,
   ): Promise<ApiResponse<void>> {
-    const authToken = await this.authService.signIn('Customer', {
+    const authToken = await this.authService.signIn(UserRole.CUSTOMER, {
       email: body.email,
       password: body.password,
     });

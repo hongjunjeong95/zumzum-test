@@ -23,6 +23,12 @@ export class CustomerRepository
     });
   }
 
+  findOneByEmail(email: string): Promise<Customer | null> {
+    return this.findOneBy({
+      email,
+    });
+  }
+
   findByIdOrFail(id: number): Promise<Customer> {
     return this.findByIdOrFail(id);
   }

@@ -21,7 +21,8 @@
     "paths": {
       "@helpers/*": ["src/common/helpers/*"],
       "@common/*": ["src/common/*"],
-      "@domain/*": ["src/domain/*"]
+      "@domain/*": ["src/domain/*"],
+      "@auth/*": ["src/auth/*"],
     },
   }
 }
