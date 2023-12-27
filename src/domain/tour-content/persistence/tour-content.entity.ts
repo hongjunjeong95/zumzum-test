@@ -1,10 +1,10 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
-import { Tour } from 'src/domain/tour/persistence/tour.entity';
-import { Seller } from 'src/domain/seller/persistence/seller.entity';
-import { HolidayOfWeek } from 'src/domain/holiday-of-week/persistence/holiday-of-week.entity';
-import { SpecificHoliday } from 'src/domain/specific-holiday/persistence/specific-holiday.entity';
 import { BaseEntity } from '@common/entity/base-entity';
+import { Seller } from '@domain/seller/persistence/seller.entity';
+import { Tour } from '@domain/tour/persistence/tour.entity';
+import { HolidayOfWeek } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+import { SpecificHoliday } from '@domain/specific-holiday/persistence/specific-holiday.entity';
 
 @Entity()
 export class TourContent extends BaseEntity {

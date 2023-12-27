@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TourContentRepositoryInterfaceToken } from './tour-content.repository.interface';
 import { TourContent } from '../tour-content.entity';
 import { TourContentRepository } from './tour-content.repository';
-import { TourRepositoryModule } from 'src/domain/tour/persistence/repository/tour.repository.module';
-import { SpecificHolidayRepositoryModule } from 'src/domain/specific-holiday/persistence/repository/specific-holiday.repository.module';
+import { TourRepositoryModule } from '@domain/tour/persistence/repository/tour.repository.module';
+import { SpecificHolidayRepositoryModule } from '@domain/specific-holiday/persistence/repository/specific-holiday.repository.module';
 
 @Module({
   imports: [

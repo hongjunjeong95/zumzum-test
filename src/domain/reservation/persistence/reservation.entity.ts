@@ -1,6 +1,6 @@
 import { BaseEntity } from '@common/entity/base-entity';
-import { Customer } from 'src/domain/customer/persistence/customer.entity';
-import { Tour } from 'src/domain/tour/persistence/tour.entity';
+import { Customer } from '@domain/customer/persistence/customer.entity';
+import { Tour } from '@domain/tour/persistence/tour.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()

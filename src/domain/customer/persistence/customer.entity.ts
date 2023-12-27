@@ -1,5 +1,5 @@
 import { BaseUserEntity } from '@common/entity/base-user-entity';
-import { Reservation } from 'src/domain/reservation/persistence/reservation.entity';
+import { Reservation } from '@domain/reservation/persistence/reservation.entity';
 import { Entity, OneToMany } from 'typeorm';
 
 @Entity()

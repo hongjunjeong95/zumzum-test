@@ -6,11 +6,11 @@ import { ConfigType } from '@nestjs/config';
 import { JwtAccessTokenStrategy } from './jwt-access.strategy';
 import JwtConfig from '@common/config/variables/jwt.config';
 import { SellerAuthController } from './controller/seller.auth.controller';
-import { SellerRepositoryModule } from 'src/domain/seller/persistence/repository/seller.repository.module';
 import { CustomerAuthController } from './controller/customer.auth.controller';
-import { CustomerRepositoryModule } from 'src/domain/customer/persistence/repository/customer.repository.module';
 import { TokenProvider } from './service/token-provider';
 import { AuthService } from './service/auth.service';
+import { SellerRepositoryModule } from '@domain/seller/persistence/repository/seller.repository.module';
+import { CustomerRepositoryModule } from '@domain/customer/persistence/repository/customer.repository.module';
 
 @Module({
   imports: [

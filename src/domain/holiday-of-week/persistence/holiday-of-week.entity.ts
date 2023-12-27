@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { TourContent } from 'src/domain/tour-content/persistence/tour-content.entity';
 import { BaseEntity } from '@common/entity/base-entity';
+import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 
 export enum WeekEnum {
   SUNDAY = 'sunday',

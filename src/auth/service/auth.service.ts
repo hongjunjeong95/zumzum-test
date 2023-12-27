@@ -6,17 +6,17 @@ import {
 } from '@common/filters/server-exception';
 import { JWTClaim, TokenProvider } from './token-provider';
 import { SignInParam, SignUpParam } from './auth.service.type';
+import { BaseUserEntity } from '@common/entity/base-user-entity';
 import {
   CustomerRepositoryInterface,
   CustomerRepositoryInterfaceToken,
-} from 'src/domain/customer/persistence/repository/customer.repository.interface';
-import { Customer } from 'src/domain/customer/persistence/customer.entity';
-import { Seller } from 'src/domain/seller/persistence/seller.entity';
+} from '@domain/customer/persistence/repository/customer.repository.interface';
 import {
   SellerRepositoryInterface,
   SellerRepositoryInterfaceToken,
-} from 'src/domain/seller/persistence/repository/seller.repository.interface';
-import { BaseUserEntity } from '@common/entity/base-user-entity';
+} from '@domain/seller/persistence/repository/seller.repository.interface';
+import { Seller } from '@domain/seller/persistence/seller.entity';
+import { Customer } from '@domain/customer/persistence/customer.entity';
 
 @Injectable()
 export class AuthService {
