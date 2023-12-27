@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Unique, Index } from 'typeorm';
 import { BaseEntity } from '@common/entity/base-entity';
 import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 
@@ -13,6 +13,7 @@ export enum WeekEnum {
 }
 
 @Entity()
+@Unique(['week', 'tourContentId'])
 export class HolidayOfWeek extends BaseEntity {
   @Column({
     name: 'week',
@@ -20,6 +21,7 @@ export class HolidayOfWeek extends BaseEntity {
     nullable: true,
     enum: WeekEnum,
   })
+  @Index()
   week: WeekEnum;
 
   @Column({ name: 'tour_content_id', type: 'int' })
@@ -28,4 +30,12 @@ export class HolidayOfWeek extends BaseEntity {
   @ManyToOne(() => TourContent, (tourContent) => tourContent.holidaysOfWeek)
   @JoinColumn({ name: 'tour_content_id' })
   tourContent: TourContent;
+
+  static create(data: { week: WeekEnum; tourContentId: number }) {
+    const holidayOfWeek = new HolidayOfWeek();
+    holidayOfWeek.week = data.week;
+    holidayOfWeek.tourContentId = data.tourContentId;
+
+    return holidayOfWeek;
+  }
 }

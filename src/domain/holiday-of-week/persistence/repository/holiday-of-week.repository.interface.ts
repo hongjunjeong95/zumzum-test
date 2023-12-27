@@ -5,5 +5,6 @@ export const HolidayOfWeekRepositoryInterfaceToken = Symbol(
 );
 export interface HolidayOfWeekRepositoryInterface {
   customSave(entity: HolidayOfWeek): Promise<HolidayOfWeek>;
+  customSave(entities: HolidayOfWeek[]): Promise<HolidayOfWeek[]>;
   findByIdOrFail(id: number): Promise<HolidayOfWeek>;
 }

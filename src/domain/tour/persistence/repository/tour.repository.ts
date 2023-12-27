@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, MoreThan, Repository } from 'typeorm';
 
 import { TourRepositoryInterface } from './tour.repository.interface';
 import { Tour } from '../tour.entity';
+import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 
 @Injectable()
 export class TourRepository
@@ -25,5 +26,14 @@ export class TourRepository
   customSave(entity: Tour[]): Promise<Tour[]>;
   customSave(entity: unknown): Promise<Tour | Tour[]> {
     return this.save(entity);
+  }
+
+  findManyInWeeksAndGreaterThanNow(weeks: WeekEnum[]): Promise<Tour[]> {
+    return this.find({
+      where: {
+        week: In(weeks),
+        date: MoreThan(new Date()),
+      },
+    });
   }
 }

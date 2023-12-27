@@ -21,7 +21,9 @@ export class HolidayOfWeekRepository
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: HolidayOfWeek): Promise<HolidayOfWeek> {
-    return this.save(seller);
+  customSave(entity: HolidayOfWeek): Promise<HolidayOfWeek>;
+  customSave(entity: HolidayOfWeek[]): Promise<HolidayOfWeek[]>;
+  customSave(entity: unknown): Promise<HolidayOfWeek | HolidayOfWeek[]> {
+    return this.save(entity);
   }
 }

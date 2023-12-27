@@ -19,7 +19,7 @@ export class CreateToursBodyDto {
   timezoneOffset: number;
 
   @ApiProperty({
-    description: 'tour content id',
+    description: 'locale start date string',
     example: new Date().toLocaleDateString(),
   })
   @IsString()
@@ -27,8 +27,10 @@ export class CreateToursBodyDto {
   localeStartDateString: string;
 
   @ApiProperty({
-    description: 'tour content id',
-    example: new Date().toLocaleDateString(),
+    description: 'locale end date string',
+    example: new Date(
+      new Date().setMonth(new Date().getMonth() + 1),
+    ).toLocaleDateString(),
   })
   @IsString()
   @IsNotEmpty()

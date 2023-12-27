@@ -2,14 +2,25 @@ import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@common/entity/base-entity';
 import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 import { Reservation } from '@domain/reservation/persistence/reservation.entity';
+import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 
 @Entity()
 export class Tour extends BaseEntity {
+  @Column({ name: 'date', type: 'timestamp' })
+  date: Date;
+
   @Column({ name: 'locale_date_string', type: 'varchar' })
   localeDateString: string;
 
   @Column({ name: 'timezone_offset', type: 'int' })
   timezoneOffset: number;
+
+  @Column({
+    name: 'week',
+    type: 'enum',
+    enum: WeekEnum,
+  })
+  week: WeekEnum;
 
   @Column({
     name: 'is_holiday',
@@ -38,6 +49,8 @@ export class Tour extends BaseEntity {
   reservations: Reservation[];
 
   static create(data: {
+    date: Date;
+    week: WeekEnum;
     localeDateString: string;
     tourContentId: number;
     timezoneOffset: number;
@@ -45,6 +58,25 @@ export class Tour extends BaseEntity {
     const tour = new Tour();
     tour.isHoliday = false;
     tour.maxReservationsPerDay = 5;
+    tour.date = data.date;
+    tour.week = data.week;
+    tour.localeDateString = data.localeDateString;
+    tour.tourContentId = data.tourContentId;
+    tour.timezoneOffset = data.timezoneOffset;
+
+    return tour;
+  }
+
+  update(data: {
+    date: Date;
+    localeDateString: string;
+    tourContentId: number;
+    timezoneOffset: number;
+  }) {
+    const tour = new Tour();
+    tour.isHoliday = false;
+    tour.maxReservationsPerDay = 5;
+    tour.date = data.date;
     tour.localeDateString = data.localeDateString;
     tour.tourContentId = data.tourContentId;
     tour.timezoneOffset = data.timezoneOffset;

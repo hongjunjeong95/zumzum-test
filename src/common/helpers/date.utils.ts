@@ -1,3 +1,5 @@
+import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+import { InternalServerErrorException } from '@nestjs/common';
 import dayjs from 'dayjs';
 
 export class DateUtils {
@@ -17,5 +19,29 @@ export class DateUtils {
           .format('YYYY-MM-DD');
       },
     );
+  }
+
+  static getWeek(localeDateString: string): WeekEnum {
+    const weekNum = dayjs(localeDateString).day();
+    switch (weekNum) {
+      case 0:
+        return WeekEnum.SUNDAY;
+      case 1:
+        return WeekEnum.MONDAY;
+      case 2:
+        return WeekEnum.TUESDAY;
+      case 3:
+        return WeekEnum.WEDNESDAY;
+      case 4:
+        return WeekEnum.THURSDAY;
+      case 5:
+        return WeekEnum.FRIDAY;
+      case 6:
+        return WeekEnum.SATURDAY;
+      default:
+        throw new InternalServerErrorException(
+          '변환해야 할 week case가 존재하지 않습니다.',
+        );
+    }
   }
 }
