@@ -29,10 +29,11 @@ export class ReservationFacade {
   ): Promise<void> {
     const tourId = body.tourId;
     const tour = await this.tourService.findOneByIdOrFail(tourId);
-    const token = await this.reservationService.getToken(
+    const isApproved = await this.reservationService.isApproved(
       tourId,
       tour.maxReservation,
     );
+    const token = await this.reservationService.getToken(isApproved);
 
     await this.reservationService.save(
       Reservation.create({
@@ -41,5 +42,13 @@ export class ReservationFacade {
         customerId,
       }),
     );
+  }
+
+  public async approveReservation(reservationId: number): Promise<void> {
+    const reservation = await this.reservationService.findOneByIdOrFail(
+      reservationId,
+    );
+    reservation.token = await this.reservationService.getToken(true);
+    await this.reservationService.save(reservation);
   }
 }

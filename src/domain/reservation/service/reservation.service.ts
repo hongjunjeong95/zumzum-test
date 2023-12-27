@@ -28,11 +28,18 @@ export class ReservationService {
     }
   }
 
-  async getToken(tourId: number, maxReservation: number) {
+  async getToken(isApproved: boolean) {
+    return isApproved ? nanoid(36).toString() : null;
+  }
+
+  async isApproved(tourId: number, maxReservation: number) {
     const currentReservationCount =
       await this.reservationRepository.getCurrentReservationCount(tourId);
 
-    const isApproved = currentReservationCount < maxReservation ? true : false;
-    return isApproved ? nanoid(36).toString() : null;
+    return currentReservationCount < maxReservation ? true : false;
+  }
+
+  async findOneByIdOrFail(reservationId: number): Promise<Reservation> {
+    return this.reservationRepository.findOneByIdOrFail(reservationId);
   }
 }

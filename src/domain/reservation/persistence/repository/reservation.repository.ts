@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { ReservationRepositoryInterface } from './reservation.repository.interface';
@@ -33,5 +33,17 @@ export class ReservationRepository
         tourId,
       },
     });
+  }
+
+  async findOneByIdOrFail(reservationId: number): Promise<Reservation | null> {
+    const entity = await this.findOneBy({
+      id: reservationId,
+    });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't found a reservation by reservationId");
   }
 }

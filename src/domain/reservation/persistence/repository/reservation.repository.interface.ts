@@ -8,4 +8,5 @@ export interface ReservationRepositoryInterface {
   customSave(entities: Reservation[]): Promise<Reservation[]>;
   findByIdOrFail(id: number): Promise<Reservation>;
   getCurrentReservationCount(tourId: number): Promise<number>;
+  findOneByIdOrFail(reservationId: number): Promise<Reservation>;
 }
