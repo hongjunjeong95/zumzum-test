@@ -87,4 +87,14 @@ export class TourService {
       localeDateString,
     );
   }
+
+  async getAvailableTours(
+    tourContentId: number,
+    targetMonth: number,
+  ): Promise<Tour[]> {
+    return this.tourRepository.findAvailableToursInMonth(
+      tourContentId,
+      targetMonth,
+    );
+  }
 }

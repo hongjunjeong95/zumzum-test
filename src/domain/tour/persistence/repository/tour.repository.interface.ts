@@ -15,4 +15,8 @@ export interface TourRepositoryInterface {
     tourContentId: number,
     localeDateString: string,
   ): Promise<Tour>;
+  findAvailableToursInMonth(
+    tourContentId: number,
+    targetMonth: number,
+  ): Promise<Tour[]>;
 }

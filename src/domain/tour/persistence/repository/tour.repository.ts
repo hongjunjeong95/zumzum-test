@@ -68,4 +68,19 @@ export class TourRepository
 
     throw new NotFoundException("Can't found a tour");
   }
+
+  async findAvailableToursInMonth(
+    tourContentId: number,
+    targetMonth: number,
+  ): Promise<Tour[]> {
+    return this.createQueryBuilder('tour')
+      .where('MONTH(tour.date) = :targetMonth', {
+        targetMonth,
+      })
+      .andWhere('tour.isHoliday = :isHoliday', { isHoliday: false })
+      .andWhere('tour.tourContentId = :tourContentId', {
+        tourContentId,
+      })
+      .getMany();
+  }
 }

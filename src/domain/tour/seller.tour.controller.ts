@@ -13,7 +13,7 @@ import { SetSpecificHolidayBodyDto } from './dtos/set-specific-holiday.dto';
 })
 @UseGuards(SellerJwtAuthGuard)
 @ApiTags('Tour')
-export class TourController {
+export class SellerTourController {
   constructor(private tourFacade: TourFacade) {}
 
   @Post()
