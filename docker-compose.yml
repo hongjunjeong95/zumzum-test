@@ -37,6 +37,22 @@ services:
       zumzum-net:
         ipv4_address: 172.19.0.13
     platform: linux/x86_64
+  zumzum-redis:
+    image: redis:6.2.6-alpine
+    command: redis-server --port 6379
+    container_name: zumzum-redis
+    hostname: zumzum-redis
+    labels:
+      - 'name=redis'
+      - 'mode=standalone'
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
+    networks:
+      zumzum-net:
+        ipv4_address: 172.19.0.14
+    platform: linux/x86_64
 
 networks:
   zumzum-net:
