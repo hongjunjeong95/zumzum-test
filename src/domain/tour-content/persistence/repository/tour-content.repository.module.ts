@@ -5,14 +5,9 @@ import { TourContentRepositoryInterfaceToken } from './tour-content.repository.i
 import { TourContent } from '../tour-content.entity';
 import { TourContentRepository } from './tour-content.repository';
 import { TourRepositoryModule } from '@domain/tour/persistence/repository/tour.repository.module';
-import { SpecificHolidayRepositoryModule } from '@domain/specific-holiday/persistence/repository/specific-holiday.repository.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([TourContent]),
-    TourRepositoryModule,
-    SpecificHolidayRepositoryModule,
-  ],
+  imports: [TypeOrmModule.forFeature([TourContent]), TourRepositoryModule],
   providers: [
     {
       provide: TourContentRepositoryInterfaceToken,

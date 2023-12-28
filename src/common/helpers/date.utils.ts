@@ -1,4 +1,4 @@
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+import { WeekEnum } from '@domain/tour/persistence/tour.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 
 export class DateUtils {

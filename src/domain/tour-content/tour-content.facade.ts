@@ -3,6 +3,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { TourContentService } from './service/tour-content.service';
 import { CreateTourContentBodyDto } from './dtos/create.dto';
+import { SetHolidayOfWeeksBodyDto } from './dtos/set-holidays-of-week.dto';
 
 @Injectable()
 export class TourContentFacade {
@@ -14,5 +15,15 @@ export class TourContentFacade {
     body: CreateTourContentBodyDto,
   ): Promise<void> {
     await this.tourContentService.create(body.content, sellerId);
+  }
+
+  @Transactional()
+  public async setHolidaysOfWeek(
+    body: SetHolidayOfWeeksBodyDto,
+  ): Promise<void> {
+    await this.tourContentService.setHolidaysOfWeek(
+      body.tourContentId,
+      body.weeks,
+    );
   }
 }

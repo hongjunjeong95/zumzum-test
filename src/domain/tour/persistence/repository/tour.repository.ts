@@ -2,8 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, In, MoreThan, Repository } from 'typeorm';
 
 import { TourRepositoryInterface } from './tour.repository.interface';
-import { Tour } from '../tour.entity';
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+import { Tour, WeekEnum } from '../tour.entity';
 
 @Injectable()
 export class TourRepository

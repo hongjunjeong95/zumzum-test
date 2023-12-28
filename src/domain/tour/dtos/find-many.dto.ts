@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Tour } from '../persistence/tour.entity';
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+import { Tour, WeekEnum } from '../persistence/tour.entity';
 
 export class FindToursQueryDto {
   @ApiProperty({

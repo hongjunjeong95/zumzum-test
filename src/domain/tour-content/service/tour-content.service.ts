@@ -5,6 +5,7 @@ import {
   TourContentRepositoryInterface,
   TourContentRepositoryInterfaceToken,
 } from '../persistence/repository/tour-content.repository.interface';
+import { WeekEnum } from '@domain/tour/persistence/tour.entity';
 
 @Injectable()
 export class TourContentService {
@@ -22,5 +23,16 @@ export class TourContentService {
         sellerId,
       }),
     );
+  }
+
+  async setHolidaysOfWeek(
+    tourContentId: number,
+    weeks: WeekEnum[],
+  ): Promise<void> {
+    const tourContent = await this.tourContentRepository.findByIdOrFail(
+      tourContentId,
+    );
+    tourContent.holidaysOfWeek = weeks;
+    await this.tourContentRepository.customSave(tourContent);
   }
 }

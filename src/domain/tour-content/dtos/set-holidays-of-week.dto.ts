@@ -1,3 +1,4 @@
+import { WeekEnum } from '@domain/tour/persistence/tour.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
@@ -6,9 +7,8 @@ import {
   IsEnum,
   ArrayMaxSize,
 } from 'class-validator';
-import { WeekEnum } from '../persistence/holiday-of-week.entity';
 
-export class CreateHolidayOfWeeksBodyDto {
+export class SetHolidayOfWeeksBodyDto {
   @ApiProperty({
     description: 'tour content id',
     example: 1,

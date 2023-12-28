@@ -10,7 +10,16 @@ import {
 import { BaseEntity } from '@common/entity/base-entity';
 import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 import { Reservation } from '@domain/reservation/persistence/reservation.entity';
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
+
+export enum WeekEnum {
+  SUNDAY = 'sunday',
+  MONDAY = 'monday',
+  TUESDAY = 'tuesday',
+  WEDNESDAY = 'wednesday',
+  THURSDAY = 'thursday',
+  FRIDAY = 'friday',
+  SATURDAY = 'saturday',
+}
 
 @Entity()
 @Unique(['tourContentId', 'localeDateString'])
@@ -61,13 +70,13 @@ export class Tour extends BaseEntity {
   static create(data: {
     date: Date;
     week: WeekEnum;
-    isHoliday: boolean;
+    isHoliday?: boolean;
     localeDateString: string;
     tourContentId: number;
     timezoneOffset: number;
   }) {
     const tour = new Tour();
-    tour.isHoliday = data.isHoliday;
+    tour.isHoliday = data.isHoliday || false;
     tour.maxReservation = 5;
     tour.date = data.date;
     tour.week = data.week;

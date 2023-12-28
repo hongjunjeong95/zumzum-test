@@ -1,5 +1,4 @@
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
-import { Tour } from '../tour.entity';
+import { Tour, WeekEnum } from '../tour.entity';
 
 export const TourRepositoryInterfaceToken = Symbol('TourRepositoryInterface');
 export interface TourRepositoryInterface {

@@ -7,7 +7,6 @@ import {
 } from '../persistence/repository/tour.repository.interface';
 import { DateUtils } from '@helpers/date.utils';
 import { CacheService } from '@common/service/cache/cache.service';
-import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 
 @Injectable()
 export class TourService {
@@ -20,15 +19,12 @@ export class TourService {
 
   private readonly logger = new Logger(Tour.name);
 
-  private async createEntities(
-    holidayWeeks: WeekEnum[],
-    param: {
-      tourContentId: number;
-      timezoneOffset: number;
-      localeStartDateString: string;
-      localeEndDateString: string;
-    },
-  ) {
+  private async createEntities(param: {
+    tourContentId: number;
+    timezoneOffset: number;
+    localeStartDateString: string;
+    localeEndDateString: string;
+  }) {
     const { localeEndDateString, timezoneOffset, tourContentId } = param;
 
     const lastTour = await this.findLastOne(tourContentId);
@@ -42,7 +38,6 @@ export class TourService {
     }).map((localeDateString) => {
       const week = DateUtils.getWeek(localeDateString);
       return Tour.create({
-        isHoliday: holidayWeeks.includes(week),
         date: new Date(localeDateString),
         week,
         localeDateString,
@@ -52,15 +47,12 @@ export class TourService {
     });
   }
 
-  async createMany(
-    holidayWeeks: WeekEnum[],
-    param: {
-      tourContentId: number;
-      timezoneOffset: number;
-      localeStartDateString: string;
-      localeEndDateString: string;
-    },
-  ) {
+  async createMany(param: {
+    tourContentId: number;
+    timezoneOffset: number;
+    localeStartDateString: string;
+    localeEndDateString: string;
+  }) {
     const {
       localeStartDateString,
       localeEndDateString,
@@ -69,31 +61,13 @@ export class TourService {
     } = param;
 
     return this.tourRepository.customSave(
-      await this.createEntities(holidayWeeks, {
+      await this.createEntities({
         localeEndDateString,
         localeStartDateString,
         timezoneOffset,
         tourContentId,
       }),
     );
-  }
-
-  async setHolidaysOfWeeks(
-    tourContentId: number,
-    weeks: WeekEnum[],
-  ): Promise<void> {
-    const tours =
-      await this.tourRepository.findManyBytourContentIdAndInWeeksAndGreaterThanNow(
-        tourContentId,
-        weeks,
-      );
-
-    const entities = tours.map((tour) => {
-      tour.isHoliday = true;
-      return tour;
-    });
-
-    await this.tourRepository.customSave(entities);
   }
 
   async findLastOne(tourContentId: number): Promise<Tour | null> {
