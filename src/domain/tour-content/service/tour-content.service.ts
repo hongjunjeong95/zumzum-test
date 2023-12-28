@@ -38,5 +38,13 @@ export class TourContentService {
     );
     tourContent.holidaysOfWeek = weeks;
     await this.tourContentRepository.customSave(tourContent);
+
+    // todo
+    // const targetMonth = new Date().getMonth() + 1;
+    // const cacheKey = this.cacheService.generateCacheKeyForHoliday(
+    //   tourContentId,
+    //   targetMonth,
+    // );
+    // this.cacheService.deleteAll(cacheKey);
   }
 }

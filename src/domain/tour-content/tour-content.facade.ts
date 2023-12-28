@@ -18,12 +18,10 @@ export class TourContentFacade {
   }
 
   @Transactional()
-  public async setHolidaysOfWeek(
-    body: SetHolidayOfWeeksBodyDto,
-  ): Promise<void> {
-    await this.tourContentService.setHolidaysOfWeek(
-      body.tourContentId,
-      body.weeks,
-    );
+  public async setHolidaysOfWeek({
+    tourContentId,
+    weeks,
+  }: SetHolidayOfWeeksBodyDto): Promise<void> {
+    await this.tourContentService.setHolidaysOfWeek(tourContentId, weeks);
   }
 }

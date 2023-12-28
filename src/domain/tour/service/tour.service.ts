@@ -93,11 +93,27 @@ export class TourService {
     targetMonth: number,
     holidaysOfWeek: WeekEnum[],
   ): Promise<Tour[]> {
-    return this.tourRepository.findAvailableToursInMonth(
+    const cacheKey = this.cacheService.generateCacheKeyForHoliday(
+      tourContentId,
+      targetMonth,
+    );
+
+    // Check if data is in cache and not expired
+    const cachedResult = this.cacheService.get(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    // If not in cache or expired, fetch from the repository
+    const result = await this.tourRepository.findAvailableToursInMonth(
       tourContentId,
       targetMonth,
       holidaysOfWeek,
     );
+
+    // Update cache and return the result
+    this.cacheService.set(cacheKey, result);
+    return result;
   }
 
   async setSpecificHoliday(
@@ -112,7 +128,7 @@ export class TourService {
     await this.tourRepository.customSave(tour);
 
     // Invalidate the cache
-    const targetMonth = new Date().getMonth() + 1;
+    const targetMonth = new Date(localeDateString).getMonth() + 1;
     const cacheKey = this.cacheService.generateCacheKeyForHoliday(
       tourContentId,
       targetMonth,
