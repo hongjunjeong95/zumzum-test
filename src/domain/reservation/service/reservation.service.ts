@@ -17,7 +17,7 @@ import {
   HolidayReservationException,
   LateCancelReservationException,
 } from '@common/filters/server-exception';
-import { Tour } from '@domain/tour/persistence/tour.entity';
+import { Tour, WeekEnum } from '@domain/tour/persistence/tour.entity';
 
 @Injectable()
 export class ReservationService {
@@ -51,12 +51,16 @@ export class ReservationService {
     return this.reservationRepository.findOneByTokenOrFail(token);
   }
 
-  public async reserve(tour: Tour, customerId: number): Promise<void> {
+  public async reserve(
+    tour: Tour,
+    customerId: number,
+    weeks: WeekEnum[],
+  ): Promise<void> {
     const tourId = tour.id;
     const isApproved = await this.isApproved(tourId, tour.maxReservation);
     const token = await this.getToken(isApproved);
 
-    if (tour.isHoliday) {
+    if (this.isHoliday(tour, weeks)) {
       throw new HolidayReservationException();
     }
 
@@ -67,6 +71,10 @@ export class ReservationService {
         customerId,
       }),
     );
+  }
+
+  private isHoliday(tour: Tour, weeks: WeekEnum[]) {
+    return tour.isHoliday || weeks.includes(tour.week);
   }
 
   public async approveReservation(reservationId: number): Promise<void> {

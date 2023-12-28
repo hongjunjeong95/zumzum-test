@@ -4,12 +4,14 @@ import { Transactional } from 'typeorm-transactional';
 import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
 import { TourService } from '@domain/tour/service/tour.service';
+import { TourContentService } from '@domain/tour-content/service/tour-content.service';
 
 @Injectable()
 export class ReservationFacade {
   constructor(
     private readonly reservationService: ReservationService,
     private readonly tourService: TourService,
+    private readonly tourContentService: TourContentService,
   ) {}
 
   /**
@@ -29,8 +31,15 @@ export class ReservationFacade {
     customerId: number,
     body: ReserveBodyDto,
   ): Promise<void> {
+    const tourContent = await this.tourContentService.findOneByIdOrFail(
+      body.tourId,
+    );
     const tour = await this.tourService.findOneByIdOrFail(body.tourId);
-    return this.reservationService.reserve(tour, customerId);
+    return this.reservationService.reserve(
+      tour,
+      customerId,
+      tourContent.holidaysOfWeek,
+    );
   }
 
   @Transactional()

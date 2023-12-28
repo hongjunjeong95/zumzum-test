@@ -5,9 +5,14 @@ import { ReservationServiceModule } from './service/reservation.module';
 import { SellerReservationController } from './seller.reservation.controller';
 import { CustomerReservationController } from './customer.reservation.controller';
 import { TourServiceModule } from '@domain/tour/service/tour.module';
+import { TourContentServiceModule } from '@domain/tour-content/service/tour-content.module';
 
 @Module({
-  imports: [ReservationServiceModule, TourServiceModule],
+  imports: [
+    ReservationServiceModule,
+    TourServiceModule,
+    TourContentServiceModule,
+  ],
   controllers: [SellerReservationController, CustomerReservationController],
   providers: [ReservationFacade],
 })
