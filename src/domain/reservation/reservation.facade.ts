@@ -1,13 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
-import { Reservation } from './persistence/reservation.entity';
 import { TourService } from '@domain/tour/service/tour.service';
-import {
-  AlreadyTokenUsedException,
-  HolidayReservationException,
-} from '@common/filters/server-exception';
 
 @Injectable()
 export class ReservationFacade {
@@ -27,31 +23,17 @@ export class ReservationFacade {
    * 3. 예약 승인 => 승인의 결과 값으로 유일한 토큰 값 생성
    * 4. 예약 펜딩 => 토큰 생성 하지 않음
    */
+
+  @Transactional()
   public async reserve(
     customerId: number,
     body: ReserveBodyDto,
   ): Promise<void> {
-    const tourId = body.tourId;
-    const tour = await this.tourService.findOneByIdOrFail(tourId);
-    const isApproved = await this.reservationService.isApproved(
-      tourId,
-      tour.maxReservation,
-    );
-    const token = await this.reservationService.getToken(isApproved);
-
-    if (tour.isHoliday) {
-      throw new HolidayReservationException();
-    }
-
-    await this.reservationService.save(
-      Reservation.create({
-        token,
-        tourId,
-        customerId,
-      }),
-    );
+    const tour = await this.tourService.findOneByIdOrFail(body.tourId);
+    return this.reservationService.reserve(tour, customerId);
   }
 
+  @Transactional()
   public async cancelReservation(
     customerId: number,
     reservationId: number,
@@ -59,22 +41,13 @@ export class ReservationFacade {
     return this.reservationService.cancelReservation(reservationId, customerId);
   }
 
+  @Transactional()
   public async approveReservation(reservationId: number): Promise<void> {
-    const reservation = await this.reservationService.findOneByIdOrFail(
-      reservationId,
-    );
-    reservation.token = await this.reservationService.getToken(true);
-    await this.reservationService.save(reservation);
+    return this.reservationService.approveReservation(reservationId);
   }
 
+  @Transactional()
   public async approveToken(token: string): Promise<void> {
-    const reservation = await this.reservationService.findOneByTokenOrFail(
-      token,
-    );
-    if (reservation.isTokenUsed) {
-      throw new AlreadyTokenUsedException();
-    }
-    reservation.isTokenUsed = true;
-    await this.reservationService.save(reservation);
+    return this.reservationService.approveToken(token);
   }
 }

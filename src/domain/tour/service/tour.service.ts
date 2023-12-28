@@ -59,7 +59,10 @@ export class TourService {
     });
   }
 
-  async setHolidaysOfWeeks(tourContentId: number, weeks: WeekEnum[]) {
+  async setHolidaysOfWeeks(
+    tourContentId: number,
+    weeks: WeekEnum[],
+  ): Promise<void> {
     const tours =
       await this.tourRepository.findManyBytourContentIdAndInWeeksAndGreaterThanNow(
         tourContentId,

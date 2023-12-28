@@ -12,7 +12,7 @@ export class HolidayOfWeekFacade {
   ) {}
 
   @Transactional()
-  public async createMany(body: CreateHolidayOfWeeksBodyDto): Promise<any> {
+  public async createMany(body: CreateHolidayOfWeeksBodyDto): Promise<void> {
     const { tourContentId, weeks } = body;
 
     await Promise.all([

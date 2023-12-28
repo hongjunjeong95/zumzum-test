@@ -12,7 +12,12 @@ import {
   ReservationRepositoryInterfaceToken,
 } from '../persistence/repository/reservation.repository.interface';
 import { DateUtils } from '@helpers/date.utils';
-import { LateCancelReservationException } from '@common/filters/server-exception';
+import {
+  AlreadyTokenUsedException,
+  HolidayReservationException,
+  LateCancelReservationException,
+} from '@common/filters/server-exception';
+import { Tour } from '@domain/tour/persistence/tour.entity';
 
 @Injectable()
 export class ReservationService {
@@ -35,11 +40,11 @@ export class ReservationService {
     }
   }
 
-  async getToken(isApproved: boolean) {
+  private async getToken(isApproved: boolean) {
     return isApproved ? nanoid(36).toString() : null;
   }
 
-  async isApproved(tourId: number, maxReservation: number) {
+  private async isApproved(tourId: number, maxReservation: number) {
     const currentReservationCount =
       await this.reservationRepository.getCurrentReservationCount(tourId);
 
@@ -56,6 +61,39 @@ export class ReservationService {
 
   async findOneByTokenOrFail(token: string): Promise<Reservation> {
     return this.reservationRepository.findOneByTokenOrFail(token);
+  }
+
+  public async reserve(tour: Tour, customerId: number): Promise<void> {
+    const tourId = tour.id;
+    const isApproved = await this.isApproved(tourId, tour.maxReservation);
+    const token = await this.getToken(isApproved);
+
+    if (tour.isHoliday) {
+      throw new HolidayReservationException();
+    }
+
+    await this.save(
+      Reservation.create({
+        token,
+        tourId,
+        customerId,
+      }),
+    );
+  }
+
+  public async approveReservation(reservationId: number): Promise<void> {
+    const reservation = await this.findOneByIdOrFail(reservationId);
+    reservation.token = await this.getToken(true);
+    await this.save(reservation);
+  }
+
+  public async approveToken(token: string): Promise<void> {
+    const reservation = await this.findOneByTokenOrFail(token);
+    if (reservation.isTokenUsed) {
+      throw new AlreadyTokenUsedException();
+    }
+    reservation.isTokenUsed = true;
+    await this.save(reservation);
   }
 
   public async cancelReservation(
