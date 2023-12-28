@@ -6,12 +6,15 @@ import {
   TourContentRepositoryInterfaceToken,
 } from '../persistence/repository/tour-content.repository.interface';
 import { WeekEnum } from '@domain/tour/persistence/tour.entity';
+import { CacheService } from '@common/service/cache/cache.service';
 
 @Injectable()
 export class TourContentService {
   constructor(
     @Inject(TourContentRepositoryInterfaceToken)
     private readonly tourContentRepository: TourContentRepositoryInterface,
+
+    private readonly cacheService: CacheService,
   ) {}
 
   private readonly logger = new Logger(TourContent.name);
@@ -39,12 +42,19 @@ export class TourContentService {
     tourContent.holidaysOfWeek = weeks;
     await this.tourContentRepository.customSave(tourContent);
 
-    // todo
-    // const targetMonth = new Date().getMonth() + 1;
-    // const cacheKey = this.cacheService.generateCacheKeyForHoliday(
-    //   tourContentId,
-    //   targetMonth,
-    // );
-    // this.cacheService.deleteAll(cacheKey);
+    this.fflushCacheByTourContentId(tourContentId);
+  }
+
+  private async fflushCacheByTourContentId(
+    tourContentId: number,
+  ): Promise<void> {
+    const monthArray = Array.from({ length: 12 }, (_, index) => index + 1);
+    monthArray.forEach((month) => {
+      const cacheKey = this.cacheService.generateCacheKeyForHoliday(
+        tourContentId,
+        month,
+      );
+      this.cacheService.delete(cacheKey);
+    });
   }
 }

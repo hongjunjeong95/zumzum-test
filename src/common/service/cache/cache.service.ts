@@ -17,15 +17,19 @@ export class CacheService {
 
   private readonly logger = new Logger(CacheService.name);
 
-  get(key: string): any {
+  async get(key: string): Promise<any> {
     return this.cacheManager.get(key);
   }
 
-  set(key: string, value: any, ttl: number = this.cacheConfig.cacheTtl): void {
+  async set(
+    key: string,
+    value: any,
+    ttl: number = this.cacheConfig.cacheTtl,
+  ): Promise<void> {
     this.cacheManager.set(key, value, ttl);
   }
 
-  delete(key: string): any {
+  async delete(key: string): Promise<any> {
     return this.cacheManager.del(key);
   }
 
