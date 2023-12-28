@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { TourService } from './service/tour.service';
 import { CreateToursBodyDto } from './dtos/create-many.dto';
@@ -14,7 +15,8 @@ export class TourFacade {
     private readonly holidayOfWeekService: HolidayOfWeekService,
   ) {}
 
-  public async createMany(body: CreateToursBodyDto): Promise<any> {
+  @Transactional()
+  public async createMany(body: CreateToursBodyDto): Promise<void> {
     const {
       tourContentId,
       timezoneOffset,
@@ -26,28 +28,25 @@ export class TourFacade {
       await this.holidayOfWeekService.findMany(tourContentId)
     ).map((holidayOfWeek) => holidayOfWeek.week);
 
-    await this.tourService.save(
-      await this.tourService.createEntities(holidayWeeks, {
-        localeEndDateString,
-        localeStartDateString,
-        timezoneOffset,
-        tourContentId,
-      }),
+    await this.tourService.createMany(holidayWeeks, {
+      localeEndDateString,
+      localeStartDateString,
+      timezoneOffset,
+      tourContentId,
+    });
+  }
+
+  @Transactional()
+  public async setSpecificHoliday(
+    body: SetSpecificHolidayBodyDto,
+  ): Promise<void> {
+    await this.tourService.setSpecificHoliday(
+      body.tourContentId,
+      body.localeDateString,
     );
   }
 
-  public async setSpecificHoliday(
-    body: SetSpecificHolidayBodyDto,
-  ): Promise<any> {
-    const tour =
-      await this.tourService.findOneByTourContentIdAndLocaleDateStringOrFail(
-        body.tourContentId,
-        body.localeDateString,
-      );
-    tour.isHoliday = true;
-    await this.tourService.save(tour);
-  }
-
+  @Transactional()
   public async getAvailableTours(query: FindToursQueryDto): Promise<Tour[]> {
     return this.tourService.getAvailableTours(
       query.tourContentId,

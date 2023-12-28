@@ -17,9 +17,9 @@ export class TourService {
 
   private readonly logger = new Logger(Tour.name);
 
-  save(tour: Tour): Promise<Tour>;
-  save(tours: Tour[]): Promise<Tour[]>;
-  async save(entity: Tour | Tour[]): Promise<Tour | Tour[]> {
+  private save(tour: Tour): Promise<Tour>;
+  private save(tours: Tour[]): Promise<Tour[]>;
+  private async save(entity: Tour | Tour[]): Promise<Tour | Tour[]> {
     if (Array.isArray(entity)) {
       return this.tourRepository.customSave(entity);
     } else {
@@ -27,7 +27,7 @@ export class TourService {
     }
   }
 
-  async createEntities(
+  private async createEntities(
     holidayWeeks: WeekEnum[],
     param: {
       tourContentId: number;
@@ -57,6 +57,32 @@ export class TourService {
         timezoneOffset,
       });
     });
+  }
+
+  async createMany(
+    holidayWeeks: WeekEnum[],
+    param: {
+      tourContentId: number;
+      timezoneOffset: number;
+      localeStartDateString: string;
+      localeEndDateString: string;
+    },
+  ) {
+    const {
+      localeStartDateString,
+      localeEndDateString,
+      timezoneOffset,
+      tourContentId,
+    } = param;
+
+    return this.save(
+      await this.createEntities(holidayWeeks, {
+        localeEndDateString,
+        localeStartDateString,
+        timezoneOffset,
+        tourContentId,
+      }),
+    );
   }
 
   async setHolidaysOfWeeks(
@@ -103,5 +129,17 @@ export class TourService {
       tourContentId,
       targetMonth,
     );
+  }
+
+  async setSpecificHoliday(
+    tourContentId: number,
+    localeDateString: string,
+  ): Promise<void> {
+    const tour = await this.findOneByTourContentIdAndLocaleDateStringOrFail(
+      tourContentId,
+      localeDateString,
+    );
+    tour.isHoliday = true;
+    await this.save(tour);
   }
 }
