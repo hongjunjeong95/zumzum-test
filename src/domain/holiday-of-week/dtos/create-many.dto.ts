@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsInt, IsArray, IsEnum } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsInt,
+  IsArray,
+  IsEnum,
+  ArrayMaxSize,
+} from 'class-validator';
 import { WeekEnum } from '../persistence/holiday-of-week.entity';
 
 export class CreateHolidayOfWeeksBodyDto {
@@ -17,6 +23,7 @@ export class CreateHolidayOfWeeksBodyDto {
     isArray: true,
   })
   @IsArray()
+  @ArrayMaxSize(7)
   @IsEnum(WeekEnum, {
     each: true,
   })

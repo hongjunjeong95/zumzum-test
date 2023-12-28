@@ -37,7 +37,17 @@ export class HolidayOfWeekService {
     );
   }
 
-  findMany(tourContentId: number): Promise<HolidayOfWeek[]> {
+  async createMany(param: { tourContentId: number; weeks: WeekEnum[] }) {
+    const { tourContentId, weeks } = param;
+    return this.save(
+      this.createEntities({
+        weeks,
+        tourContentId,
+      }),
+    );
+  }
+
+  async findMany(tourContentId: number): Promise<HolidayOfWeek[]> {
     return this.holidayOfWeekRepository.findManyByTourContentId(tourContentId);
   }
 }

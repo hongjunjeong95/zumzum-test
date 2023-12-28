@@ -15,11 +15,12 @@ export class HolidayOfWeekFacade {
   public async createMany(body: CreateHolidayOfWeeksBodyDto): Promise<any> {
     const { tourContentId, weeks } = body;
 
-    const entities = this.holidayOfWeekService.createEntities({
-      weeks,
-      tourContentId,
-    });
-    await this.holidayOfWeekService.save(entities);
-    await this.tourService.setHolidaysOfWeeks(tourContentId, weeks);
+    await Promise.all([
+      this.holidayOfWeekService.createMany({
+        weeks,
+        tourContentId,
+      }),
+      this.tourService.setHolidaysOfWeeks(tourContentId, weeks),
+    ]);
   }
 }
