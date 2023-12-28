@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { SellerController } from './seller.controller';
 import { SellerFacade } from './seller.facade';
-import { SellerServiceModule } from './service/seller.module';
+import { SellerServiceModule } from './service/seller.service.module';
 
 @Module({
   imports: [SellerServiceModule],
