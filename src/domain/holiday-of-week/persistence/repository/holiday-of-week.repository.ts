@@ -17,11 +17,13 @@ export class HolidayOfWeekRepository
   protected readonly ENTITY_NAME = HolidayOfWeek.name;
   protected readonly entity = HolidayOfWeek;
 
-  findByIdOrFail(id: number): Promise<HolidayOfWeek> {
+  async findByIdOrFail(id: number): Promise<HolidayOfWeek> {
     return this.findByIdOrFail(id);
   }
 
-  findManyByTourContentId(tourContentId: number): Promise<HolidayOfWeek[]> {
+  async findManyByTourContentId(
+    tourContentId: number,
+  ): Promise<HolidayOfWeek[]> {
     return this.find({
       where: {
         tourContentId,
@@ -31,7 +33,7 @@ export class HolidayOfWeekRepository
 
   customSave(entity: HolidayOfWeek): Promise<HolidayOfWeek>;
   customSave(entity: HolidayOfWeek[]): Promise<HolidayOfWeek[]>;
-  customSave(entity: unknown): Promise<HolidayOfWeek | HolidayOfWeek[]> {
+  async customSave(entity: unknown): Promise<HolidayOfWeek | HolidayOfWeek[]> {
     return this.save(entity);
   }
 }
