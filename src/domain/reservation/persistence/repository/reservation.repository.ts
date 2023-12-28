@@ -21,8 +21,8 @@ export class ReservationRepository
     return this.findByIdOrFail(id);
   }
 
-  async customSave(entity: Reservation): Promise<Reservation>;
-  async customSave(entity: Reservation[]): Promise<Reservation[]>;
+  customSave(entity: Reservation): Promise<Reservation>;
+  customSave(entity: Reservation[]): Promise<Reservation[]>;
   async customSave(entity: unknown): Promise<Reservation | Reservation[]> {
     return this.save(entity);
   }

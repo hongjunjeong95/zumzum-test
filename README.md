@@ -21,8 +21,8 @@
 # Todo - System
 
 1. refactoring architecture
-2. async
-3. transactional
+2. async[o]
+3. transactional[o]
 4. unit test
 5. integration test
 6. cache

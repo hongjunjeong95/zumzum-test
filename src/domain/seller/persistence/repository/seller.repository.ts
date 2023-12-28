@@ -17,23 +17,23 @@ export class SellerRepository
   protected readonly ENTITY_NAME = Seller.name;
   protected readonly entity = Seller;
 
-  findOneByEmailOrFail(email: string): Promise<Seller> {
+  async findOneByEmailOrFail(email: string): Promise<Seller> {
     return this.findOneByOrFail({
       email,
     });
   }
 
-  findOneByEmail(email: string): Promise<Seller | null> {
+  async findOneByEmail(email: string): Promise<Seller | null> {
     return this.findOneBy({
       email,
     });
   }
 
-  findByIdOrFail(id: number): Promise<Seller> {
+  async findByIdOrFail(id: number): Promise<Seller> {
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: Seller): Promise<Seller> {
+  async customSave(seller: Seller): Promise<Seller> {
     return this.save(seller);
   }
 }

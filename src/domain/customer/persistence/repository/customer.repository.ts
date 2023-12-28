@@ -17,23 +17,23 @@ export class CustomerRepository
   protected readonly ENTITY_NAME = Customer.name;
   protected readonly entity = Customer;
 
-  findOneByEmailOrFail(email: string): Promise<Customer> {
+  async findOneByEmailOrFail(email: string): Promise<Customer> {
     return this.findOneByOrFail({
       email,
     });
   }
 
-  findOneByEmail(email: string): Promise<Customer | null> {
+  async findOneByEmail(email: string): Promise<Customer | null> {
     return this.findOneBy({
       email,
     });
   }
 
-  findByIdOrFail(id: number): Promise<Customer> {
+  async findByIdOrFail(id: number): Promise<Customer> {
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: Customer): Promise<Customer> {
+  async customSave(seller: Customer): Promise<Customer> {
     return this.save(seller);
   }
 }

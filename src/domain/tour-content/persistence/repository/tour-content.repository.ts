@@ -17,11 +17,11 @@ export class TourContentRepository
   protected readonly ENTITY_NAME = TourContent.name;
   protected readonly entity = TourContent;
 
-  findByIdOrFail(id: number): Promise<TourContent> {
+  async findByIdOrFail(id: number): Promise<TourContent> {
     return this.findByIdOrFail(id);
   }
 
-  customSave(seller: TourContent): Promise<TourContent> {
+  async customSave(seller: TourContent): Promise<TourContent> {
     return this.save(seller);
   }
 }

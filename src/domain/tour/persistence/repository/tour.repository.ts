@@ -18,13 +18,13 @@ export class TourRepository
   protected readonly ENTITY_NAME = Tour.name;
   protected readonly entity = Tour;
 
-  findByIdOrFail(id: number): Promise<Tour> {
+  async findByIdOrFail(id: number): Promise<Tour> {
     return this.findByIdOrFail(id);
   }
 
   customSave(entity: Tour): Promise<Tour>;
   customSave(entity: Tour[]): Promise<Tour[]>;
-  customSave(entity: unknown): Promise<Tour | Tour[]> {
+  async customSave(entity: unknown): Promise<Tour | Tour[]> {
     return this.save(entity);
   }
 
