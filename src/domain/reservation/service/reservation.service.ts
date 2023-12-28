@@ -28,18 +28,6 @@ export class ReservationService {
 
   private readonly logger = new Logger(Reservation.name);
 
-  save(reservation: Reservation): Promise<Reservation>;
-  save(reservations: Reservation[]): Promise<Reservation[]>;
-  async save(
-    entity: Reservation | Reservation[],
-  ): Promise<Reservation | Reservation[]> {
-    if (Array.isArray(entity)) {
-      return this.reservationRepository.customSave(entity);
-    } else {
-      return this.reservationRepository.customSave(entity);
-    }
-  }
-
   private async getToken(isApproved: boolean) {
     return isApproved ? nanoid(36).toString() : null;
   }
@@ -72,7 +60,7 @@ export class ReservationService {
       throw new HolidayReservationException();
     }
 
-    await this.save(
+    await this.reservationRepository.customSave(
       Reservation.create({
         token,
         tourId,
@@ -84,7 +72,7 @@ export class ReservationService {
   public async approveReservation(reservationId: number): Promise<void> {
     const reservation = await this.findOneByIdOrFail(reservationId);
     reservation.token = await this.getToken(true);
-    await this.save(reservation);
+    await this.reservationRepository.customSave(reservation);
   }
 
   public async approveToken(token: string): Promise<void> {
@@ -93,7 +81,7 @@ export class ReservationService {
       throw new AlreadyTokenUsedException();
     }
     reservation.isTokenUsed = true;
-    await this.save(reservation);
+    await this.reservationRepository.customSave(reservation);
   }
 
   public async cancelReservation(
@@ -111,7 +99,7 @@ export class ReservationService {
 
     if (daysUntilTour >= availableCancelDays) {
       reservation.isCancelled = true;
-      await this.save(reservation);
+      await this.reservationRepository.customSave(reservation);
     } else {
       throw new LateCancelReservationException();
     }

@@ -15,19 +15,7 @@ export class HolidayOfWeekService {
 
   private readonly logger = new Logger(HolidayOfWeek.name);
 
-  save(holidaysOfWeek: HolidayOfWeek): Promise<HolidayOfWeek>;
-  save(holidaysOfWeek: HolidayOfWeek[]): Promise<HolidayOfWeek[]>;
-  async save(
-    entity: HolidayOfWeek | HolidayOfWeek[],
-  ): Promise<HolidayOfWeek | HolidayOfWeek[]> {
-    if (Array.isArray(entity)) {
-      return this.holidayOfWeekRepository.customSave(entity);
-    } else {
-      return this.holidayOfWeekRepository.customSave(entity);
-    }
-  }
-
-  createEntities(param: { tourContentId: number; weeks: WeekEnum[] }) {
+  private createEntities(param: { tourContentId: number; weeks: WeekEnum[] }) {
     const { tourContentId, weeks } = param;
     return weeks.map((week) =>
       HolidayOfWeek.create({
@@ -39,7 +27,7 @@ export class HolidayOfWeekService {
 
   async createMany(param: { tourContentId: number; weeks: WeekEnum[] }) {
     const { tourContentId, weeks } = param;
-    return this.save(
+    return this.holidayOfWeekRepository.customSave(
       this.createEntities({
         weeks,
         tourContentId,

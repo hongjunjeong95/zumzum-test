@@ -20,7 +20,7 @@
 
 # Todo - System
 
-1. refactoring architecture
+1. refactoring architecture[o]
 2. async[o]
 3. transactional[o]
 4. unit test

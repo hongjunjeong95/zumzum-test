@@ -17,16 +17,6 @@ export class TourService {
 
   private readonly logger = new Logger(Tour.name);
 
-  private save(tour: Tour): Promise<Tour>;
-  private save(tours: Tour[]): Promise<Tour[]>;
-  private async save(entity: Tour | Tour[]): Promise<Tour | Tour[]> {
-    if (Array.isArray(entity)) {
-      return this.tourRepository.customSave(entity);
-    } else {
-      return this.tourRepository.customSave(entity);
-    }
-  }
-
   private async createEntities(
     holidayWeeks: WeekEnum[],
     param: {
@@ -75,7 +65,7 @@ export class TourService {
       tourContentId,
     } = param;
 
-    return this.save(
+    return this.tourRepository.customSave(
       await this.createEntities(holidayWeeks, {
         localeEndDateString,
         localeStartDateString,
@@ -100,7 +90,7 @@ export class TourService {
       return tour;
     });
 
-    await this.save(entities);
+    await this.tourRepository.customSave(entities);
   }
 
   async findLastOne(tourContentId: number): Promise<Tour | null> {
@@ -140,6 +130,6 @@ export class TourService {
       localeDateString,
     );
     tour.isHoliday = true;
-    await this.save(tour);
+    await this.tourRepository.customSave(tour);
   }
 }
