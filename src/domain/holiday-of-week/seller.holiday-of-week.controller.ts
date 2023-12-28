@@ -12,7 +12,7 @@ import { CreateHolidayOfWeeksBodyDto } from './dtos/create-many.dto';
 })
 @UseGuards(SellerJwtAuthGuard)
 @ApiTags('HolidayOfWeek')
-export class HolidayOfWeekController {
+export class SellerHolidayOfWeekController {
   constructor(private holidayOfWeekFacade: HolidayOfWeekFacade) {}
 
   @Post()

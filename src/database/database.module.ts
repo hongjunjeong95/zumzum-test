@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
 @Module({
   imports: [
@@ -32,6 +34,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         };
       },
       inject: [ConfigService],
+      async dataSourceFactory(option) {
+        if (!option) throw new Error('Invalid options passed');
+
+        return addTransactionalDataSource(new DataSource(option));
+      },
     }),
   ],
 })
