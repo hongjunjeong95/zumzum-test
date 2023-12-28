@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { Tour } from '../persistence/tour.entity';
+import { Tour, WeekEnum } from '../persistence/tour.entity';
 import {
   TourRepositoryInterface,
   TourRepositoryInterfaceToken,
@@ -91,10 +91,12 @@ export class TourService {
   async getAvailableTours(
     tourContentId: number,
     targetMonth: number,
+    holidaysOfWeek: WeekEnum[],
   ): Promise<Tour[]> {
     return this.tourRepository.findAvailableToursInMonth(
       tourContentId,
       targetMonth,
+      holidaysOfWeek,
     );
   }
 

@@ -5,5 +5,5 @@ export const TourContentRepositoryInterfaceToken = Symbol(
 );
 export interface TourContentRepositoryInterface {
   customSave(entity: TourContent): Promise<TourContent>;
-  findByIdOrFail(id: number): Promise<TourContent>;
+  findOneByIdOrFail(id: number): Promise<TourContent>;
 }

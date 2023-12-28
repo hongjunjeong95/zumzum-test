@@ -6,10 +6,14 @@ import { CreateToursBodyDto } from './dtos/create-many.dto';
 import { SetSpecificHolidayBodyDto } from './dtos/set-specific-holiday.dto';
 import { FindToursQueryDto } from './dtos/find-many.dto';
 import { Tour } from './persistence/tour.entity';
+import { TourContentService } from '@domain/tour-content/service/tour-content.service';
 
 @Injectable()
 export class TourFacade {
-  constructor(private readonly tourService: TourService) {}
+  constructor(
+    private readonly tourService: TourService,
+    private readonly tourContentService: TourContentService,
+  ) {}
 
   @Transactional()
   public async createMany(body: CreateToursBodyDto): Promise<void> {
@@ -39,10 +43,18 @@ export class TourFacade {
   }
 
   @Transactional()
-  public async getAvailableTours(query: FindToursQueryDto): Promise<Tour[]> {
+  public async getAvailableTours({
+    targetMonth,
+    tourContentId,
+  }: FindToursQueryDto): Promise<Tour[]> {
+    const tourContent = await this.tourContentService.findOneByIdOrFail(
+      tourContentId,
+    );
+    const holidaysOfWeek = tourContent.holidaysOfWeek;
     return this.tourService.getAvailableTours(
-      query.tourContentId,
-      query.targetMonth,
+      tourContentId,
+      targetMonth,
+      holidaysOfWeek,
     );
   }
 }

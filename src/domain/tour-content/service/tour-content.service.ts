@@ -25,11 +25,15 @@ export class TourContentService {
     );
   }
 
+  async findOneByIdOrFail(tourContentId: number): Promise<TourContent> {
+    return this.tourContentRepository.findOneByIdOrFail(tourContentId);
+  }
+
   async setHolidaysOfWeek(
     tourContentId: number,
     weeks: WeekEnum[],
   ): Promise<void> {
-    const tourContent = await this.tourContentRepository.findByIdOrFail(
+    const tourContent = await this.tourContentRepository.findOneByIdOrFail(
       tourContentId,
     );
     tourContent.holidaysOfWeek = weeks;

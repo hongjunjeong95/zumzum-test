@@ -83,11 +83,13 @@ export class TourRepository
   async findAvailableToursInMonth(
     tourContentId: number,
     targetMonth: number,
+    holidaysOfWeek: WeekEnum[],
   ): Promise<Tour[]> {
     return this.createQueryBuilder('tour')
       .where('MONTH(tour.date) = :targetMonth', {
         targetMonth,
       })
+      .andWhere('tour.week NOT IN (:...holidaysOfWeek)', { holidaysOfWeek })
       .andWhere('tour.isHoliday = :isHoliday', { isHoliday: false })
       .andWhere('tour.tourContentId = :tourContentId', {
         tourContentId,
