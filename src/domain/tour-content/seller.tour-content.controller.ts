@@ -14,7 +14,7 @@ import { Seller } from '@domain/seller/persistence/seller.entity';
 })
 @UseGuards(SellerJwtAuthGuard)
 @ApiTags('TourContent')
-export class TourContentController {
+export class SellerTourContentController {
   constructor(private tourContentFacade: TourContentFacade) {}
 
   @Post()

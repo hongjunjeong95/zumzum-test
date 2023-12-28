@@ -6,6 +6,7 @@ import {
   TourRepositoryInterfaceToken,
 } from '../persistence/repository/tour.repository.interface';
 import { DateUtils } from '@helpers/date.utils';
+import { CacheService } from '@common/service/cache/cache.service';
 import { WeekEnum } from '@domain/holiday-of-week/persistence/holiday-of-week.entity';
 
 @Injectable()
@@ -13,6 +14,8 @@ export class TourService {
   constructor(
     @Inject(TourRepositoryInterfaceToken)
     private readonly tourRepository: TourRepositoryInterface,
+
+    private readonly cacheService: CacheService,
   ) {}
 
   private readonly logger = new Logger(Tour.name);
@@ -131,5 +134,13 @@ export class TourService {
     );
     tour.isHoliday = true;
     await this.tourRepository.customSave(tour);
+
+    // Invalidate the cache
+    const targetMonth = new Date().getMonth() + 1;
+    const cacheKey = this.cacheService.generateCacheKeyForHoliday(
+      tourContentId,
+      targetMonth,
+    );
+    this.cacheService.delete(cacheKey);
   }
 }

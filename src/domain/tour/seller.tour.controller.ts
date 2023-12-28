@@ -24,8 +24,8 @@ export class SellerTourController {
     return ApiResponse.success(await this.tourFacade.createMany(body));
   }
 
-  @Put('/holiday')
-  @ApiOperation({ summary: 'Create tours' })
+  @Put('/specific-holiday')
+  @ApiOperation({ summary: 'Set specific holiday' })
   async setSpecificHoliday(
     @Body() body: SetSpecificHolidayBodyDto,
   ): Promise<ApiResponse<void>> {
