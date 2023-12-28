@@ -1,5 +1,6 @@
+import DbConfig from '@common/config/variables/db.config';
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
@@ -7,16 +8,15 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => {
-        const isProduction =
-          configService.get<string>('NODE_ENV') === 'production';
+      useFactory: (config: ConfigType<typeof DbConfig>) => {
+        const isProduction = process.env.NODE_ENV === 'production';
         return {
           type: 'mysql',
-          host: configService.get<string>('db.host'),
-          port: configService.get<number>('db.port'),
-          username: configService.get<string>('db.username'),
-          password: configService.get<string>('db.password'),
-          database: configService.get<string>('db.database'),
+          host: config.host,
+          port: config.port,
+          username: config.username,
+          password: config.password,
+          database: config.database,
 
           ssl: isProduction,
           synchronize: false,
@@ -33,7 +33,7 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
           },
         };
       },
-      inject: [ConfigService],
+      inject: [DbConfig.KEY],
       async dataSourceFactory(option) {
         if (!option) throw new Error('Invalid options passed');
 
