@@ -11,6 +11,7 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
       useFactory: (config: ConfigType<typeof DbConfig>) => {
         const isProduction = process.env.NODE_ENV === 'production';
         return {
+          name: 'readDb',
           type: 'mysql',
           host: config.host,
           port: config.port,
@@ -36,7 +37,6 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
       inject: [DbConfig.KEY],
       async dataSourceFactory(option) {
         if (!option) throw new Error('Invalid options passed');
-
         return addTransactionalDataSource(new DataSource(option));
       },
     }),
