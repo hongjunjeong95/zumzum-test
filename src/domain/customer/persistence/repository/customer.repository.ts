@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { CustomerRepositoryInterface } from './customer.repository.interface';
@@ -18,9 +18,12 @@ export class CustomerRepository
   protected readonly entity = Customer;
 
   async findOneByEmailOrFail(email: string): Promise<Customer> {
-    return this.findOneByOrFail({
-      email,
-    });
+    const customer = this.findOneByEmail(email);
+    if (!customer) {
+      throw new NotFoundException(`${this.entity.name}가 존재하지 않습니다.`);
+    }
+
+    return customer;
   }
 
   async findOneByEmail(email: string): Promise<Customer | null> {

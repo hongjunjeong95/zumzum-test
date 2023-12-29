@@ -1,21 +1,19 @@
-import { AuthService } from '@auth/service/auth.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 
-import { MockRepository } from '../mocks/types';
+import { AuthService } from '@auth/service/auth.service';
+import { MockRepository, MockService } from '../mocks/types';
 import {
   SellerRepositoryInterface,
   SellerRepositoryInterfaceToken,
 } from '@domain/seller/persistence/repository/seller.repository.interface';
-import {
-  CustomerRepositoryInterface,
-  CustomerRepositoryInterfaceToken,
-} from '@domain/customer/persistence/repository/customer.repository.interface';
+import { CustomerRepositoryInterfaceToken } from '@domain/customer/persistence/repository/customer.repository.interface';
 import {
   CustomerMockRepository,
   SellerMockRepository,
 } from '../mocks/repositories';
 import { UserRole } from '@common/entity/base-user-entity';
-import { SignUpParam } from '@auth/service/auth.service.type';
+import { SignInParam, SignUpParam } from '@auth/service/auth.service.type';
 import { getMockSeller } from '../mocks/fixtures/seller';
 import {
   PasswordNotMatchException,
@@ -23,11 +21,13 @@ import {
 } from '@common/filters/server-exception';
 import { TokenProvider } from '@auth/service/token-provider';
 import { MockedTokenProviderService } from '../../test/mocks/services';
+import { BCryptUtils } from '@helpers/bcrypt.utils';
+import { Seller } from '@domain/seller/persistence/seller.entity';
 
 describe(AuthService.name, () => {
   let service: AuthService;
   let sellerRepository: MockRepository<SellerRepositoryInterface>;
-  let customerRepository: MockRepository<CustomerRepositoryInterface>;
+  let tokenProvider: MockService<TokenProvider>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,7 +51,7 @@ describe(AuthService.name, () => {
 
     service = module.get(AuthService);
     sellerRepository = module.get(SellerRepositoryInterfaceToken);
-    customerRepository = module.get(CustomerRepositoryInterfaceToken);
+    tokenProvider = module.get(TokenProvider);
   });
 
   it('should be defined', () => {
@@ -112,6 +112,71 @@ describe(AuthService.name, () => {
 
       expect(sellerRepository.findOneByEmail).toHaveBeenCalled();
       expect(sellerRepository.customSave).toHaveBeenCalled();
+    });
+  });
+
+  describe('signIn', () => {
+    it(`returns ${NotFoundException.name} when there is no user with a email`, async () => {
+      sellerRepository.findOneByEmailOrFail?.mockRejectedValue(
+        new NotFoundException(`${Seller.name}가 존재하지 않습니다.`),
+      );
+      const role = UserRole.SELLER;
+      const param: SignInParam = {
+        email: 'seller2@gmail.com',
+        password: '12345678',
+      };
+
+      try {
+        await service.signIn(role, param);
+      } catch (error: any) {
+        expect(sellerRepository.findOneByEmailOrFail).toHaveBeenCalled();
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+
+    it(`returns ${PasswordNotMatchException.name} when a password from param doesn't match with a password on the database`, async () => {
+      const seller = getMockSeller();
+      sellerRepository.findOneByEmailOrFail?.mockResolvedValue(seller);
+      const role = UserRole.SELLER;
+      const param: SignInParam = {
+        email: 'seller2@gmail.com',
+        password: '12345678',
+      };
+      BCryptUtils.verify = jest.fn(
+        async (password: string, hashedPassword: string) => {
+          return false;
+        },
+      );
+
+      try {
+        await service.signIn(role, param);
+      } catch (error: any) {
+        expect(sellerRepository.findOneByEmailOrFail).toHaveBeenCalled();
+        expect(error).toBeInstanceOf(PasswordNotMatchException);
+      }
+    });
+
+    it('should sign in successfully', async () => {
+      const seller = getMockSeller();
+      sellerRepository.findOneByEmailOrFail?.mockResolvedValue(seller);
+      const role = UserRole.SELLER;
+      const param: SignInParam = {
+        email: 'seller2@gmail.com',
+        password: '12345678',
+      };
+      BCryptUtils.verify = jest.fn(
+        async (password: string, hashedPassword: string) => {
+          return true;
+        },
+      );
+      const token = 'toeknaslkdfjwlfsakljfiewjliej243u2394';
+      tokenProvider.createAuthToken.mockResolvedValue(token);
+
+      const result = await service.signIn(role, param);
+
+      expect(sellerRepository.findOneByEmailOrFail).toHaveBeenCalled();
+      expect(sellerRepository.customSave).toHaveBeenCalled();
+      expect(result).toBe(token);
     });
   });
 });

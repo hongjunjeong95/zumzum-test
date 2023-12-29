@@ -72,15 +72,9 @@ export class AuthService {
 
   async signIn(role: UserRole, param: SignInParam): Promise<string> {
     const repository = this.getUserRepository(role);
-
     const user = await repository.findOneByEmailOrFail(param.email);
 
-    if (!user) {
-      throw new NotFoundException();
-    }
-
     const verified = await BCryptUtils.verify(param.password, user.password);
-
     if (!verified) {
       throw new PasswordNotMatchException();
     }
@@ -93,9 +87,7 @@ export class AuthService {
     };
 
     const authToken = this.tokenProvider.createAuthToken(jwtClaim);
-
     await repository.customSave(user);
-
     return authToken;
   }
 }
