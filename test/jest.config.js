@@ -1,5 +1,6 @@
 module.exports = {
   moduleFileExtensions: ["js", "json", "ts"],
+  testPathIgnorePatterns: ['/node_modules/', '/src/','/test/mocks'],
   rootDir: "..",
   clearMocks:true,
   testEnvironment: "node",
