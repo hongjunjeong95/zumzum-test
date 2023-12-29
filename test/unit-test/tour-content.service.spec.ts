@@ -11,7 +11,7 @@ import {
 } from '@domain/tour-content/persistence/repository/tour-content.repository.interface';
 import { TourContentMockRepository } from '../../test/mocks/repositories';
 import { WeekEnum } from '@domain/tour/persistence/tour.entity';
-import { getMockTourContent } from '../../test/mocks/fixtures/seller';
+import { getMockTourContent } from '../mocks/fixtures/fixtures';
 
 describe(TourContentService.name, () => {
   let service: TourContentService;

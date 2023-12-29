@@ -14,7 +14,7 @@ import {
 } from '../mocks/repositories';
 import { UserRole } from '@common/entity/base-user-entity';
 import { SignInParam, SignUpParam } from '@auth/service/auth.service.type';
-import { getMockSeller } from '../mocks/fixtures/seller';
+import { getMockSeller } from '../mocks/fixtures/fixtures';
 import {
   PasswordNotMatchException,
   UserExistsException,

@@ -1,3 +1,4 @@
+import { Customer } from '@domain/customer/persistence/customer.entity';
 import { Reservation } from '@domain/reservation/persistence/reservation.entity';
 import { Seller } from '@domain/seller/persistence/seller.entity';
 import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
@@ -15,6 +16,17 @@ export const getMockSeller = async () => {
   return seller;
 };
 
+export const getMockCustomer = async () => {
+  const seller = new Customer();
+  seller.id = 1;
+  seller.createdAt = new Date();
+  seller.updatedAt = new Date();
+  seller.name = 'seller-name';
+  seller.email = 'seller@gmail.com';
+  seller.password = await BCryptUtils.encrypt('password12345678');
+  return seller;
+};
+
 export const getMockTour = () => {
   const tour = new Tour();
   tour.id = 1;
@@ -22,10 +34,11 @@ export const getMockTour = () => {
   tour.updatedAt = new Date();
   tour.isHoliday = false;
   tour.maxReservation = 5;
-  tour.date = new Date(new Date().setDate(new Date().getDate() + 10));
-  tour.localeDateString = '2023/11/27';
+  tour.date = new Date('2023/12/27');
+  tour.localeDateString = '2023/12/27';
   tour.timezoneOffset = -540;
-  tour.week = WeekEnum.SUNDAY;
+  tour.week = WeekEnum.WEDNESDAY;
+  tour.tourContentId = 1;
   return tour;
 };
 

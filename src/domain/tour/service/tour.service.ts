@@ -97,13 +97,12 @@ export class TourService {
   async getAvailableTours(
     tourContentId: number,
     targetMonth: number,
-    holidaysOfWeek: WeekEnum[],
+    holidaysOfWeek: WeekEnum[] | null,
   ): Promise<Tour[]> {
     const cacheKey = this.cacheService.generateCacheKeyForHoliday(
       tourContentId,
       targetMonth,
     );
-
     const cachedResult = await this.cacheService.get<Tour[]>(cacheKey);
     if (cachedResult) {
       return cachedResult;

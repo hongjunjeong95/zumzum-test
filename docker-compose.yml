@@ -38,7 +38,7 @@ services:
     command: --bind-address=0.0.0.0
     platform: linux/x86_64    
   test-db:
-    image: mysql:5.7.30
+    image: mysql:8.2.0
     restart: unless-stopped
     container_name: test-db
     ports:
@@ -47,7 +47,7 @@ services:
       - .test.env
     networks:
       zumzum-net:
-        ipv4_address: 172.19.0.15
+        ipv4_address: 172.19.0.14
     platform: linux/x86_64
   zumzum-redis:
     image: redis:6.2.6-alpine
@@ -63,7 +63,23 @@ services:
       - ./data/redis:/data
     networks:
       zumzum-net:
-        ipv4_address: 172.19.0.14
+        ipv4_address: 172.19.0.20
+    platform: linux/x86_64
+  test-redis:
+    image: redis:6.2.6-alpine
+    command: redis-server --port 6379
+    container_name: test-redis
+    hostname: test-redis
+    labels:
+      - 'name=redis'
+      - 'mode=standalone'
+    ports:
+      - 6380:6379
+    volumes:
+      - ./data/redis:/data
+    networks:
+      zumzum-net:
+        ipv4_address: 172.19.0.21
     platform: linux/x86_64
 
 networks:

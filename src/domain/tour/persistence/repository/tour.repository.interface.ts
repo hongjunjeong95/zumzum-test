@@ -18,6 +18,6 @@ export interface TourRepositoryInterface {
   findAvailableToursInMonth(
     tourContentId: number,
     targetMonth: number,
-    holidaysOfWeek: WeekEnum[],
+    holidaysOfWeek: WeekEnum[] | null,
   ): Promise<Tour[]>;
 }

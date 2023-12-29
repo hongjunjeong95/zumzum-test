@@ -11,7 +11,6 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
       useFactory: (config: ConfigType<typeof DbConfig>) => {
         const isProduction = process.env.NODE_ENV === 'production';
         return {
-          name: 'readDb',
           type: 'mysql',
           host: config.host,
           port: config.port,

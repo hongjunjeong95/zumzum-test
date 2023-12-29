@@ -17,9 +17,9 @@ export class TourContentRepository
   protected readonly ENTITY_NAME = TourContent.name;
   protected readonly entity = TourContent;
 
-  async findOneByIdOrFail(tourId: number): Promise<TourContent> {
+  async findOneByIdOrFail(id: number): Promise<TourContent> {
     const entity = await this.findOneBy({
-      id: tourId,
+      id,
     });
 
     if (entity) {

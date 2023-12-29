@@ -9,8 +9,9 @@ import { SignUpBodyDto } from './dto/auth-sign-up.dto';
 import { SignInBodyDto } from './dto/auth-sign-in.dto';
 import { AuthService } from '../service/auth.service';
 import { UserRole } from '@common/entity/base-user-entity';
+import { ApiPrefix } from '@common/constant';
 
-@Controller('/customer-api/v1/auth')
+@Controller(`${ApiPrefix.CUSTOMER_API_V1}/auth`)
 @ApiTags('auth')
 export class CustomerAuthController {
   constructor(

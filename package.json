@@ -23,7 +23,8 @@
     "test:cov": "jest --config ./test/jest.config.js --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.config.js",
-    "test:e2e:watch": "jest --config ./test/jest-e2e.config.js --watch"
+    "test:e2e:watch": "jest --config ./test/jest-e2e.config.js --watch",
+    "test:e2e:cov": "jest --config ./test/jest-e2e.config.js --coverage --runInBand"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.1.1",

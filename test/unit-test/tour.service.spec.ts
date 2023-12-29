@@ -11,7 +11,7 @@ import {
 } from '@domain/tour/persistence/repository/tour.repository.interface';
 import { CacheService } from '@common/service/cache/cache.service';
 import { CacheMockService } from '../../test/mocks/services';
-import { getMockTour } from '../../test/mocks/fixtures/seller';
+import { getMockTour } from '../mocks/fixtures/fixtures';
 import { NotFoundException } from '@nestjs/common';
 
 describe(TourService.name, () => {

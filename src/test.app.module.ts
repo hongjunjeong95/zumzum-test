@@ -22,7 +22,6 @@ import { DataSource } from 'typeorm';
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         return {
-          name: 'testDb',
           type: 'mysql',
           host: configService.get('TEST_DB_HOST'),
           port: configService.get('TEST_DB_PORT'),
