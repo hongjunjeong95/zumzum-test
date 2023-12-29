@@ -27,10 +27,6 @@
 5. integration test
 6. cache[o]
 
-# Todo - feature
-
-1. 새롭게 투어를 추가했을 때 cache 삭제 혹은 갱신
-
 # 추가로 구현한 기능 및 디테일한 조건들
 
 - 인증 기능(AuthN, AuthR)

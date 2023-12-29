@@ -28,3 +28,6 @@ export const TourMockRepository = () =>
     findAvailableToursInMonth: jest.fn(),
     findOneByTourContentIdAndLocaleDateStringOrFail: jest.fn(),
   });
+
+export const TourContentMockRepository = () =>
+  Object.assign(commonMockRepository(), {});

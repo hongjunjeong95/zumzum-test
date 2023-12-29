@@ -14,7 +14,7 @@ export class TourContent extends BaseEntity {
     type: 'simple-array',
     nullable: true,
   })
-  holidaysOfWeek: WeekEnum[];
+  holidaysOfWeek: WeekEnum[] | null;
 
   @Column({ name: 'seller_id', type: 'int' })
   sellerId: number;

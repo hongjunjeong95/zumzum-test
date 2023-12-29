@@ -41,8 +41,7 @@ export class TourContentService {
     );
     tourContent.holidaysOfWeek = weeks;
     await this.tourContentRepository.customSave(tourContent);
-
-    this.fflushCacheByTourContentId(tourContentId);
+    await this.fflushCacheByTourContentId(tourContentId);
   }
 
   private async fflushCacheByTourContentId(

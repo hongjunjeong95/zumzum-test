@@ -1,5 +1,6 @@
 import { Reservation } from '@domain/reservation/persistence/reservation.entity';
 import { Seller } from '@domain/seller/persistence/seller.entity';
+import { TourContent } from '@domain/tour-content/persistence/tour-content.entity';
 import { Tour, WeekEnum } from '@domain/tour/persistence/tour.entity';
 import { BCryptUtils } from '@helpers/bcrypt.utils';
 
@@ -39,4 +40,15 @@ export const getMockReservation = () => {
   reservation.tourId = 1;
   reservation.customerId = 1;
   return reservation;
+};
+
+export const getMockTourContent = () => {
+  const tourContent = new TourContent();
+  tourContent.id = 1;
+  tourContent.createdAt = new Date();
+  tourContent.updatedAt = new Date();
+  tourContent.content = 'hello its content';
+  tourContent.holidaysOfWeek = null;
+  tourContent.sellerId = 1;
+  return tourContent;
 };

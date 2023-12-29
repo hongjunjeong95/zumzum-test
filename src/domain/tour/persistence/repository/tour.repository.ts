@@ -52,7 +52,7 @@ export class TourRepository
     });
   }
 
-  async findOneByIdOrFail(tourId: number): Promise<Tour | null> {
+  async findOneByIdOrFail(tourId: number): Promise<Tour> {
     const entity = await this.findOneBy({
       id: tourId,
     });

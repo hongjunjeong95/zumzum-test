@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { TourContentRepositoryInterface } from './tour-content.repository.interface';
@@ -17,10 +17,16 @@ export class TourContentRepository
   protected readonly ENTITY_NAME = TourContent.name;
   protected readonly entity = TourContent;
 
-  async findOneByIdOrFail(id: number): Promise<TourContent> {
-    return this.findOneByOrFail({
-      id,
+  async findOneByIdOrFail(tourId: number): Promise<TourContent> {
+    const entity = await this.findOneBy({
+      id: tourId,
     });
+
+    if (entity) {
+      return entity;
+    }
+
+    throw new NotFoundException("Can't find a tour content");
   }
 
   async customSave(seller: TourContent): Promise<TourContent> {
