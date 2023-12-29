@@ -61,7 +61,7 @@ export class TourRepository
       return entity;
     }
 
-    throw new NotFoundException("Can't found a tour");
+    throw new NotFoundException("Can't find a tour");
   }
 
   async findOneByTourContentIdAndLocaleDateStringOrFail(
@@ -77,7 +77,7 @@ export class TourRepository
       return entity;
     }
 
-    throw new NotFoundException("Can't found a tour");
+    throw new NotFoundException("Can't find a tour");
   }
 
   async findAvailableToursInMonth(

@@ -28,11 +28,14 @@ export class ReservationService {
 
   private readonly logger = new Logger(Reservation.name);
 
-  private async getToken(isApproved: boolean) {
+  public async getToken(isApproved: boolean) {
     return isApproved ? nanoid(36).toString() : null;
   }
 
-  private async isApproved(tourId: number, maxReservation: number) {
+  public async isApproved(
+    tourId: number,
+    maxReservation: number,
+  ): Promise<boolean> {
     const currentReservationCount =
       await this.reservationRepository.getCurrentReservationCount(tourId);
 
@@ -43,26 +46,18 @@ export class ReservationService {
     return this.reservationRepository.findOneByIdOrFail(reservationId);
   }
 
-  async findOneByIdWithTourOrFail(reservationId: number): Promise<Reservation> {
-    return this.reservationRepository.findOneByIdWithTourOrFail(reservationId);
-  }
-
-  async findOneByTokenOrFail(token: string): Promise<Reservation> {
-    return this.reservationRepository.findOneByTokenOrFail(token);
-  }
-
   public async reserve(
     tour: Tour,
     customerId: number,
-    weeks: WeekEnum[],
+    holidaysOfWeeks: WeekEnum[],
   ): Promise<void> {
+    if (this.isHoliday(tour, holidaysOfWeeks)) {
+      throw new HolidayReservationException();
+    }
+
     const tourId = tour.id;
     const isApproved = await this.isApproved(tourId, tour.maxReservation);
     const token = await this.getToken(isApproved);
-
-    if (this.isHoliday(tour, weeks)) {
-      throw new HolidayReservationException();
-    }
 
     await this.reservationRepository.customSave(
       Reservation.create({
@@ -73,8 +68,8 @@ export class ReservationService {
     );
   }
 
-  private isHoliday(tour: Tour, weeks: WeekEnum[]) {
-    return tour.isHoliday || weeks.includes(tour.week);
+  private isHoliday(tour: Tour, holidaysOfWeeks: WeekEnum[]) {
+    return tour.isHoliday || holidaysOfWeeks.includes(tour.week);
   }
 
   public async approveReservation(reservationId: number): Promise<void> {
@@ -84,7 +79,9 @@ export class ReservationService {
   }
 
   public async approveToken(token: string): Promise<void> {
-    const reservation = await this.findOneByTokenOrFail(token);
+    const reservation = await this.reservationRepository.findOneByTokenOrFail(
+      token,
+    );
     if (reservation.isTokenUsed) {
       throw new AlreadyTokenUsedException();
     }
@@ -96,7 +93,8 @@ export class ReservationService {
     reservationId: number,
     customerId: number,
   ): Promise<void> {
-    const reservation = await this.findOneByIdWithTourOrFail(reservationId);
+    const reservation =
+      await this.reservationRepository.findOneByIdWithTourOrFail(reservationId);
 
     if (reservation.customerId !== customerId) {
       throw new UnauthorizedException();

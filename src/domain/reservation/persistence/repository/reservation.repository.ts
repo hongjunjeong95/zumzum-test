@@ -44,7 +44,7 @@ export class ReservationRepository
       return entity;
     }
 
-    throw new NotFoundException("Can't found a reservation by reservationId");
+    throw new NotFoundException("Can't find a reservation by reservationId");
   }
 
   async findOneByIdWithTourOrFail(
@@ -63,7 +63,7 @@ export class ReservationRepository
       return entity;
     }
 
-    throw new NotFoundException("Can't found a reservation by reservationId");
+    throw new NotFoundException("Can't find a reservation by reservationId");
   }
 
   async findOneByTokenOrFail(token: string): Promise<Reservation | null> {
@@ -75,6 +75,6 @@ export class ReservationRepository
       return entity;
     }
 
-    throw new NotFoundException("Can't found a reservation by token");
+    throw new NotFoundException("Can't find a reservation by token");
   }
 }
