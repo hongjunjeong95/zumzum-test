@@ -18,7 +18,7 @@
     "migration:run": "yarn run typeorm migration:run",
     "migration:revert": "yarn run typeorm migration:revert",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "jest --config ./test/jest.config.js",
     "test:watch": "jest --config ./test/jest.config.js --watch --coverage",
     "test:cov": "jest --config ./test/jest.config.js --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

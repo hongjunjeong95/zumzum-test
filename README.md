@@ -18,15 +18,6 @@
 - 예약 신청에 성공한 고객은 유일한 토큰 값을 승인의 결과값으로 획득 [o]
 - 여행 3일전까지 예약 취소 가능 [o]
 
-# Todo - System
-
-1. refactoring architecture[o]
-2. async[o]
-3. transactional[o]
-4. unit test
-5. integration test
-6. cache[o]
-
 # 추가로 구현한 기능 및 디테일한 조건들
 
 - 인증 기능(AuthN, AuthR)
@@ -36,4 +27,31 @@
 - Tour 생성 기능
   - Tour Content와 ManyToOne 관계로 각 날짜 별 투어의 정보름 담은 Tour 생성
   - 투어라는 것은 이벤트이고 행사이기 때문에 시작 날짜와 종료 날짜를 받아서 진행한다. 시스템적으로는 두 날짜를 받고 현재 시각 이후로 tour들을 대량 생산한다.
-    - 여기서 추가로 해커가 악의적으로 몇년치 날짜를 입력하여 유사 Dos(서비스 거부 공격)을 해가지고 디비를 망가트릴 수 있는데 해당 방어 로직은 시간이 나면 하기로 한다.
+    - 여기서 추가로 해커가 악의적으로 몇년치 날짜를 입력하여 유사 Dos(서비스 거부 공격)을 해가지고 디비를 망가트릴 수 있어서 최대 3개월치만 생성할 수 있도록 제한함
+
+# Server Start
+
+1. `docker network create --gateway 172.19.0.1 --subnet 172.19.0.0/16 zumzum`
+2. `docker-compose up`
+3. `yarn run start:dev`
+
+# DB Migration
+
+1. `docker-compose up` to create database
+2. `yarn run migration:run`
+
+**DDL 작성 파일 위치**
+
+- database/migrations
+
+# Test
+
+1. Unit Test
+   `yarn run test:cov`
+2. Integration Test
+   `yarn run test:e2e:cov`
+
+# 추가 주의 사항
+
+- 당연히 .env 파일은 git 올리는게 아니지만 코딩 테스트이기 때문에 면접관의 테스트 편의상 .env 파일을 git 올림
+- 노출되어도 상관 없는 테스트 정보들 뿐

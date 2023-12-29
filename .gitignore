@@ -35,7 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # data
-/database/mysql/data
+/database/mysql
 /data
 
 # vscode

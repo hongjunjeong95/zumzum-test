@@ -1,27 +1,5 @@
 version: '3.8'
 services:
-  # app:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile.dev
-  #   container_name: app
-  #   volumes:
-  #     - /usr/src/.yarn
-  #     - ./:/usr/src
-  #     - ./data/logs:/usr/src/logs
-  #   ports:
-  #     - '3000:3000'
-  #   expose:
-  #     - 3000
-  #   links:
-  #     - zumzum-mysql
-  #   depends_on:
-  #     - zumzum-mysql
-  #   env_file:
-  #     - ./.env.development
-  #   networks:
-  #     zumzum-net:
-  #       ipv4_address: 172.19.0.12
   zumzum-mysql:
     image: mysql:8.2.0
     restart: unless-stopped
