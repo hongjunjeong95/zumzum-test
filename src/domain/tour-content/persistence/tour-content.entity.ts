@@ -12,7 +12,6 @@ export class TourContent extends BaseEntity {
   @Column({
     name: 'holidays_of_week',
     type: 'simple-array',
-    enum: WeekEnum,
     nullable: true,
   })
   holidaysOfWeek: WeekEnum[];

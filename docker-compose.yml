@@ -1,27 +1,27 @@
 version: '3.8'
 services:
-  app:
-    build:
-      context: ./
-      dockerfile: Dockerfile.dev
-    container_name: app
-    volumes:
-      - /usr/src/.yarn
-      - ./:/usr/src
-      - ./data/logs:/usr/src/logs
-    ports:
-      - '3000:3000'
-    expose:
-      - 3000
-    links:
-      - zumzum-mysql
-    depends_on:
-      - zumzum-mysql
-    env_file:
-      - ./.env.development
-    networks:
-      zumzum-net:
-        ipv4_address: 172.19.0.12
+  # app:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile.dev
+  #   container_name: app
+  #   volumes:
+  #     - /usr/src/.yarn
+  #     - ./:/usr/src
+  #     - ./data/logs:/usr/src/logs
+  #   ports:
+  #     - '3000:3000'
+  #   expose:
+  #     - 3000
+  #   links:
+  #     - zumzum-mysql
+  #   depends_on:
+  #     - zumzum-mysql
+  #   env_file:
+  #     - ./.env.development
+  #   networks:
+  #     zumzum-net:
+  #       ipv4_address: 172.19.0.12
   zumzum-mysql:
     image: mysql:8.2.0
     restart: unless-stopped
@@ -30,12 +30,24 @@ services:
       - '3307:3306'
     volumes:
       - ./database/mysql/data:/var/lib/mysql
-      - ./database/mysql/setup_mysql.sh:/setup_mysql.sh
     env_file:
       - .env.development
     networks:
       zumzum-net:
         ipv4_address: 172.19.0.13
+    command: --bind-address=0.0.0.0
+    platform: linux/x86_64    
+  test-db:
+    image: mysql:5.7.30
+    restart: unless-stopped
+    container_name: test-db
+    ports:
+      - 3308:3306
+    env_file:
+      - .test.env
+    networks:
+      zumzum-net:
+        ipv4_address: 172.19.0.15
     platform: linux/x86_64
   zumzum-redis:
     image: redis:6.2.6-alpine
