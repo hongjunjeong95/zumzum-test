@@ -12,10 +12,7 @@ import {
   ReservationRepositoryInterfaceToken,
 } from '@domain/reservation/persistence/repository/reservation.repository.interface';
 import { ReservationService } from '@domain/reservation/service/reservation.service';
-import {
-  getMockReservation,
-  getMockTour,
-} from '../../test/mocks/fixtures/seller';
+import { getMockReservation, getMockTour } from '../mocks/fixtures/seller';
 import { WeekEnum } from '@domain/tour/persistence/tour.entity';
 import nanoid from 'nanoid';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';

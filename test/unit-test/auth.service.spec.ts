@@ -20,7 +20,7 @@ import {
   UserExistsException,
 } from '@common/filters/server-exception';
 import { TokenProvider } from '@auth/service/token-provider';
-import { MockedTokenProviderService } from '../../test/mocks/services';
+import { MockedTokenProviderService } from '../mocks/services';
 import { BCryptUtils } from '@helpers/bcrypt.utils';
 import { Seller } from '@domain/seller/persistence/seller.entity';
 
