@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Transactional } from 'typeorm-transactional';
+import { Transactional, IsolationLevel } from 'typeorm-transactional';
 
 import { ReservationService } from './service/reservation.service';
 import { ReserveBodyDto } from './dtos/reserve.dto';
@@ -26,7 +26,7 @@ export class ReservationFacade {
    * 4. 예약 펜딩 => 토큰 생성 하지 않음
    */
 
-  @Transactional()
+  @Transactional({ isolationLevel: IsolationLevel.SERIALIZABLE })
   public async reserve(
     customerId: number,
     body: ReserveBodyDto,

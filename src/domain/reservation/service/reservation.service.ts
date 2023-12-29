@@ -46,6 +46,15 @@ export class ReservationService {
     return this.reservationRepository.findOneByIdOrFail(reservationId);
   }
 
+  /**
+   *
+   * @param tour
+   * @param customerId
+   * @param holidaysOfWeeks
+   * @description
+   * 1. 동시성 문제로 User A, B가 동시에 this.isApproved를 통과하고 A가 먼저 함수를 빠져나서 카운트가
+   * 다 찼음에도 불구하고 B도 자동 승인이 될 수 있음. Isolation Serializable하게 facade 쪽에서 처리해줘야 함.
+   */
   public async reserve(
     tour: Tour,
     customerId: number,
