@@ -41,3 +41,9 @@ export class HolidayReservationException extends BaseException {
     super(400, message);
   }
 }
+
+export class TooManyDatesToCreateException extends BaseException {
+  constructor(message: string = '너무 많은 tour를 생성하려고 합니다.') {
+    super(400, message);
+  }
+}

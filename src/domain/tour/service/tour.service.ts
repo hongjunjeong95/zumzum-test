@@ -7,6 +7,7 @@ import {
 } from '../persistence/repository/tour.repository.interface';
 import { DateUtils } from '@helpers/date.utils';
 import { CacheService } from '@common/service/cache/cache.service';
+import { TooManyDatesToCreateException } from '@common/filters/server-exception';
 
 @Injectable()
 export class TourService {
@@ -32,10 +33,15 @@ export class TourService {
       ? DateUtils.addDateToLocaleDateString(1, lastTour.localeDateString)
       : param.localeStartDateString;
 
-    return DateUtils.generateDateArray({
-      localeStartDateString: updatedStartLocaleDateString,
+    this.validateMonthDiffToCreateTours(
+      new Date(updatedStartLocaleDateString),
+      new Date(localeEndDateString),
+    );
+
+    return DateUtils.generateDateArray(
+      updatedStartLocaleDateString,
       localeEndDateString,
-    }).map((localeDateString) => {
+    ).map((localeDateString) => {
       const week = DateUtils.getWeek(localeDateString);
       return Tour.create({
         date: new Date(localeDateString),
@@ -45,6 +51,15 @@ export class TourService {
         timezoneOffset,
       });
     });
+  }
+
+  private validateMonthDiffToCreateTours(date1: Date, date2: Date) {
+    const monthDiff = DateUtils.getMonthDiff(date1, date2);
+    if (monthDiff > 3) {
+      throw new TooManyDatesToCreateException(
+        '한 번에 생성할 수 있는 투어는 최대 3개월입니다.',
+      );
+    }
   }
 
   async createMany(param: {

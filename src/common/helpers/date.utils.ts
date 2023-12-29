@@ -2,12 +2,10 @@ import { WeekEnum } from '@domain/tour/persistence/tour.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 
 export class DateUtils {
-  static generateDateArray(range: {
-    localeStartDateString: string;
-    localeEndDateString: string;
-  }): string[] {
-    const { localeStartDateString, localeEndDateString } = range;
-
+  static generateDateArray(
+    localeStartDateString: string,
+    localeEndDateString: string,
+  ): string[] {
     const addDays = (date: Date, days: number): Date => {
       const newDate = new Date(date);
       newDate.setDate(newDate.getDate() + days);
@@ -67,11 +65,17 @@ export class DateUtils {
 
   static getDaysUntilDate(date: Date) {
     const tourDate = new Date(date);
-
-    // 현재 날짜와 tourDate 간의 차이를 일 단위로 계산
     const millisecondsInOneDay = 24 * 60 * 60 * 1000; // 1일의 밀리초
     return Math.floor(
       (tourDate.getTime() - new Date().getTime()) / millisecondsInOneDay,
+    );
+  }
+
+  static getMonthDiff(date1: Date, date2: Date) {
+    return (
+      date2.getMonth() -
+      date1.getMonth() +
+      12 * (date2.getFullYear() - date1.getFullYear())
     );
   }
 }
