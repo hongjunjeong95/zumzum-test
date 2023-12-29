@@ -28,18 +28,24 @@ export class TourService {
   }) {
     const { localeEndDateString, timezoneOffset, tourContentId } = param;
 
-    const lastTour = await this.findLastOne(tourContentId);
-    const updatedStartLocaleDateString = lastTour
+    const lastTour = await this.tourRepository.findLastOne(tourContentId);
+    const updatedLocaleStartDateString = lastTour
       ? DateUtils.addDateToLocaleDateString(1, lastTour.localeDateString)
       : param.localeStartDateString;
 
-    this.validateMonthDiffToCreateTours(
-      new Date(updatedStartLocaleDateString),
-      new Date(localeEndDateString),
-    );
+    if (
+      this.isOverMonthDiffAvailableCancelDays(
+        new Date(updatedLocaleStartDateString),
+        new Date(localeEndDateString),
+      )
+    ) {
+      throw new TooManyDatesToCreateException(
+        '한 번에 생성할 수 있는 투어는 최대 3개월입니다.',
+      );
+    }
 
     return DateUtils.generateDateArray(
-      updatedStartLocaleDateString,
+      updatedLocaleStartDateString,
       localeEndDateString,
     ).map((localeDateString) => {
       const week = DateUtils.getWeek(localeDateString);
@@ -53,13 +59,12 @@ export class TourService {
     });
   }
 
-  private validateMonthDiffToCreateTours(date1: Date, date2: Date) {
-    const monthDiff = DateUtils.getMonthDiff(date1, date2);
-    if (monthDiff > 3) {
-      throw new TooManyDatesToCreateException(
-        '한 번에 생성할 수 있는 투어는 최대 3개월입니다.',
-      );
-    }
+  private isOverMonthDiffAvailableCancelDays(
+    date1: Date,
+    date2: Date,
+  ): boolean {
+    const availableCancelDays = 3;
+    return DateUtils.getMonthDiff(date1, date2) > availableCancelDays;
   }
 
   async createMany(param: {
@@ -67,7 +72,7 @@ export class TourService {
     timezoneOffset: number;
     localeStartDateString: string;
     localeEndDateString: string;
-  }) {
+  }): Promise<Tour[]> {
     const {
       localeStartDateString,
       localeEndDateString,
@@ -85,22 +90,8 @@ export class TourService {
     );
   }
 
-  async findLastOne(tourContentId: number): Promise<Tour | null> {
-    return this.tourRepository.findLastOne(tourContentId);
-  }
-
   async findOneByIdOrFail(tourId: number): Promise<Tour> {
     return this.tourRepository.findOneByIdOrFail(tourId);
-  }
-
-  async findOneByTourContentIdAndLocaleDateStringOrFail(
-    tourContentId: number,
-    localeDateString: string,
-  ): Promise<Tour> {
-    return this.tourRepository.findOneByTourContentIdAndLocaleDateStringOrFail(
-      tourContentId,
-      localeDateString,
-    );
   }
 
   async getAvailableTours(
@@ -113,21 +104,21 @@ export class TourService {
       targetMonth,
     );
 
-    // Check if data is in cache and not expired
-    const cachedResult = this.cacheService.get(cacheKey);
+    const cachedResult = await this.cacheService.get<Tour[]>(cacheKey);
     if (cachedResult) {
       return cachedResult;
     }
 
-    // If not in cache or expired, fetch from the repository
     const result = await this.tourRepository.findAvailableToursInMonth(
       tourContentId,
       targetMonth,
       holidaysOfWeek,
     );
 
-    // Update cache and return the result
-    this.cacheService.set(cacheKey, result);
+    if (result.length > 0) {
+      this.cacheService.set(cacheKey, result);
+    }
+
     return result;
   }
 
@@ -135,19 +126,19 @@ export class TourService {
     tourContentId: number,
     localeDateString: string,
   ): Promise<void> {
-    const tour = await this.findOneByTourContentIdAndLocaleDateStringOrFail(
-      tourContentId,
-      localeDateString,
-    );
+    const tour =
+      await this.tourRepository.findOneByTourContentIdAndLocaleDateStringOrFail(
+        tourContentId,
+        localeDateString,
+      );
     tour.isHoliday = true;
     await this.tourRepository.customSave(tour);
 
-    // Invalidate the cache
     const targetMonth = new Date(localeDateString).getMonth() + 1;
     const cacheKey = this.cacheService.generateCacheKeyForHoliday(
       tourContentId,
       targetMonth,
     );
-    this.cacheService.delete(cacheKey);
+    await this.cacheService.delete(cacheKey);
   }
 }

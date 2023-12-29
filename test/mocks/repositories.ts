@@ -21,3 +21,10 @@ export const ReservationMockRepository = () =>
     findOneByTokenOrFail: jest.fn(),
     findOneByIdWithTourOrFail: jest.fn(),
   });
+
+export const TourMockRepository = () =>
+  Object.assign(commonMockRepository(), {
+    findLastOne: jest.fn(),
+    findAvailableToursInMonth: jest.fn(),
+    findOneByTourContentIdAndLocaleDateStringOrFail: jest.fn(),
+  });

@@ -253,7 +253,6 @@ describe(ReservationService.name, () => {
       try {
         await service.cancelReservation(reservationId, customerId);
       } catch (error: any) {
-        console.log(error);
         expect(error).toBeInstanceOf(LateCancelReservationException);
       }
     });

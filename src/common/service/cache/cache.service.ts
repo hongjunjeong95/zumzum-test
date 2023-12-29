@@ -17,8 +17,8 @@ export class CacheService {
 
   private readonly logger = new Logger(CacheService.name);
 
-  async get(key: string): Promise<any> {
-    return this.cacheManager.get(key);
+  async get<T>(key: string): Promise<T | undefined> {
+    return this.cacheManager.get<T>(key);
   }
 
   async set(
@@ -29,8 +29,8 @@ export class CacheService {
     this.cacheManager.set(key, value, ttl);
   }
 
-  async delete(key: string): Promise<any> {
-    return this.cacheManager.del(key);
+  async delete(key: string): Promise<void> {
+    this.cacheManager.del(key);
   }
 
   generateCacheKeyForHoliday(
